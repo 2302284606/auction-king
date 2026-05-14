@@ -1,0 +1,8 @@
+.item-bar{display:flex;gap:4px;margin-top:6px}
+.item-slot{width:36px;height:36px;border:1px solid #333;background:rgba(255,255,255,0.03);border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer;transition:0.2s;font-size:16px}
+.item-slot:hover{border-color:#ffd700;background:rgba(255,215,0,0.08)}
+.item-slot.used{opacity:0.25;cursor:not-allowed;pointer-events:none}
+.item-slot .slot-key{position:absolute;top:-1px;right:-1px;font-size:8px;color:#ffd700;background:rgba(0,0,0,0.7);padding:0 3px;border-radius:0 3px 0 3px;font-weight:700;line-height:14px;font-family:'Arial'}
+.item-slot .slot-icon{font-size:16px;line-height:1}
+.item-slot.my-slot{border-color:rgba(255,215,0,0.3)}
+.item-slot.my-slot:hover{border-color:#ffd700;box-shadow:0 0 8px rgba(255,215,0,0.15)}

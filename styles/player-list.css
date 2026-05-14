@@ -1,0 +1,18 @@
+.player-card{padding:12px 14px;border-bottom:1px solid #111;display:flex;align-items:center;gap:10px;transition:0.3s}
+.player-card.active{background:rgba(255,215,0,0.06);border-left:3px solid #ffd700}
+.player-card.winner-card{background:rgba(68,255,68,0.06);border-left:3px solid #44ff44}
+.player-card.loser-card{background:rgba(255,68,68,0.06);border-left:3px solid #ff4444}
+.avatar-frame{width:44px;height:44px;border:2px solid #444;flex-shrink:0;overflow:hidden;background:#111;border-radius:50%}
+.avatar-frame img{width:100%;height:100%;object-fit:cover;display:block}
+.avatar-frame.active-frame{border-color:#ffd700;box-shadow:0 0 12px rgba(255,215,0,0.25)}
+.player-info{flex:1;min-width:0}
+.player-name{font-size:13px;font-weight:600;letter-spacing:0.5px}
+.p-money{color:#ffd700;font-size:12px;margin-top:2px;font-family:'Tahoma'}
+.p-status{font-size:10px;color:#555;margin-top:2px}
+.p-hafcoins{color:#00ccff;font-size:11px;margin-top:1px;font-family:'Tahoma'}
+.p-hafcoins .haf-icon{display:inline-block;width:10px;height:10px;background:linear-gradient(135deg,#00ccff,#0088cc);border-radius:50%;vertical-align:middle;margin-right:2px;box-shadow:0 0 4px rgba(0,204,255,0.4)}
+.shop-entry{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(0,204,255,0.08);border:1px solid rgba(0,204,255,0.25);border-radius:4px;font-size:11px;color:#00ccff;cursor:pointer;transition:0.2s;white-space:nowrap}
+.shop-entry:hover{background:rgba(0,204,255,0.15);border-color:#00ccff}
+.map-entry{cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:4px;font-size:11px;color:#ffd700;transition:0.2s;white-space:nowrap}
+.map-entry:hover,.map-entry:active{background:rgba(255,215,0,0.15);border-color:#ffd700}
+.panel-header-right{display:flex;gap:8px;align-items:center}

@@ -1,0 +1,29 @@
+.shop-overlay{position:fixed;inset:0;z-index:1000;display:none;background:rgba(0,0,0,0.85);justify-content:center;align-items:center;backdrop-filter:blur(6px)}
+.shop-overlay.show{display:flex}
+.shop-panel{background:rgba(12,14,18,0.97);border:1px solid #2a2a2a;border-radius:10px;padding:24px;width:90%;max-width:520px;box-shadow:0 20px 60px rgba(0,0,0,0.7);position:relative}
+.shop-title{font-size:20px;font-weight:900;letter-spacing:3px;text-align:center;margin-bottom:4px;color:#00ccff}
+.shop-subtitle{font-size:11px;color:#666;text-align:center;margin-bottom:16px;letter-spacing:1px}
+.shop-balance{text-align:center;margin-bottom:16px;padding:10px;background:rgba(0,204,255,0.05);border:1px solid rgba(0,204,255,0.15);border-radius:6px}
+.shop-balance .bal-label{font-size:11px;color:#888}
+.shop-balance .bal-val{font-size:24px;font-weight:900;color:#00ccff;font-family:'Arial Black'}
+.shop-items{display:flex;flex-direction:column;gap:10px}
+.shop-item{display:flex;align-items:center;gap:14px;padding:12px 14px;background:rgba(255,255,255,0.02);border:1px solid #222;border-radius:8px;transition:0.2s}
+.shop-item:hover{border-color:#444;background:rgba(255,255,255,0.04)}
+.shop-item-icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:28px;background:rgba(255,255,255,0.03);border:1px solid #333;border-radius:8px;flex-shrink:0}
+.shop-item-info{flex:1;min-width:0}
+.shop-item-name{font-size:14px;font-weight:700;color:#fff}
+.shop-item-desc{font-size:11px;color:#888;margin-top:2px}
+.shop-item-price{font-size:13px;color:#00ccff;font-weight:700;margin-top:4px}
+.shop-buy-btn{padding:8px 20px;background:linear-gradient(135deg,#0088cc,#00bbff);color:#fff;border:none;font-size:13px;font-weight:700;cursor:pointer;border-radius:6px;transition:0.2s;white-space:nowrap;flex-shrink:0}
+.shop-buy-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,204,255,0.3)}
+.shop-buy-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none;box-shadow:none}
+.shop-buy-btn.owned{background:#333;color:#666}
+.shop-close{position:absolute;top:12px;right:14px;width:32px;height:32px;background:rgba(255,255,255,0.06);border:1px solid #444;border-radius:50%;color:#aaa;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.2s}
+.shop-close:hover{color:#fff;border-color:#888}
+.shop-inventory{margin-top:14px;padding-top:12px;border-top:1px solid #222}
+.shop-inv-title{font-size:12px;color:#888;margin-bottom:8px;letter-spacing:1px}
+.shop-inv-slots{display:flex;gap:6px}
+.shop-inv-slot{width:40px;height:40px;border:1px solid #333;background:rgba(255,255,255,0.02);border-radius:4px;display:flex;align-items:center;justify-content:center;position:relative;font-size:18px}
+.shop-inv-slot .inv-num{position:absolute;top:-1px;right:-1px;font-size:8px;color:#ffd700;background:rgba(0,0,0,0.7);padding:0 3px;border-radius:0 3px 0 3px;font-weight:700;line-height:14px}
+.shop-inv-slot.filled{border-color:rgba(255,215,0,0.3)}
+.shop-inv-slot.empty{color:#333}

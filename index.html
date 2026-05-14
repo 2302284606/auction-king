@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>古藏 · 五轮竞拍之王</title>
+<link rel="stylesheet" href="styles/global.css">
+<link rel="stylesheet" href="styles/player-list.css">
+<link rel="stylesheet" href="styles/auction-area.css">
+<link rel="stylesheet" href="styles/numpad.css">
+<link rel="stylesheet" href="styles/warehouse-grid.css">
+<link rel="stylesheet" href="styles/item-bar.css">
+<link rel="stylesheet" href="styles/settlement-modal.css">
+<link rel="stylesheet" href="styles/map-overlay.css">
+<link rel="stylesheet" href="styles/character-select.css">
+<link rel="stylesheet" href="styles/shop.css">
+<link rel="stylesheet" href="styles/confirm-dialog.css">
+<link rel="stylesheet" href="styles/start-screen.css">
+<link rel="stylesheet" href="styles/lobby.css">
+</head>
+<body>
+
+<div class="start-screen" id="startScreen">
+  <div class="start-bg-overlay"></div>
+  <div class="start-particles" id="startParticles"></div>
+  <div class="start-content">
+    <div class="start-top-bar">
+      <div class="start-logo">
+        <span class="start-logo-icon">&#x1F3DB;</span>
+        <span class="start-logo-text">古藏</span>
+      </div>
+      <div class="start-top-actions">
+        <div class="start-top-btn" onclick="openStartCharSelect()">&#x1F3AD; 角色选择</div>
+      </div>
+    </div>
+
+    <div class="start-hero">
+      <div class="start-hero-character">
+        <img src="./image/玩家1.jpg" alt="角色" id="startCharImg">
+        <div class="start-hero-glow"></div>
+      </div>
+      <div class="start-hero-info">
+        <div class="start-title-group">
+          <h1 class="start-title">五轮竞拍之王</h1>
+          <div class="start-subtitle">&#x1F451; 古藏拍卖 · 智者为王</div>
+        </div>
+        <div class="start-hero-name" id="startCharName">伊森 · 古董鉴定师</div>
+        <div class="start-desc">在五轮竞拍中与AI对手博弈，运用策略和技能赢得稀世藏品。<br>每轮都有独特的成交规则，出价需谨慎！</div>
+        <button class="start-play-btn" onclick="enterGame()">
+          <span class="play-btn-icon">&#x25B6;</span>
+          <span class="play-btn-text">进入游戏</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="start-bottom-section">
+      <div class="start-features">
+        <div class="start-feature-card">
+          <div class="start-feature-icon">&#x1F3AF;</div>
+          <div class="start-feature-name">五轮竞拍</div>
+          <div class="start-feature-desc">每轮规则不同，策略多变</div>
+        </div>
+        <div class="start-feature-card">
+          <div class="start-feature-icon">&#x1F3AD;</div>
+          <div class="start-feature-name">五大角色</div>
+          <div class="start-feature-desc">独特技能，各显神通</div>
+        </div>
+        <div class="start-feature-card">
+          <div class="start-feature-icon">&#x1F48E;</div>
+          <div class="start-feature-name">稀世藏品</div>
+          <div class="start-feature-desc">珍品无数，等你来拍</div>
+        </div>
+        <div class="start-feature-card">
+          <div class="start-feature-icon">&#x1F5FA;&#xFE0F;</div>
+          <div class="start-feature-name">仓库探索</div>
+          <div class="start-feature-desc">随机地图，惊喜连连</div>
+        </div>
+      </div>
+      <div class="start-char-grid" id="startCharGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="char-select-overlay" id="startCharOverlay">
+  <div class="char-select-panel">
+    <div class="char-select-close" onclick="closeStartCharSelect()">&#x2715;</div>
+    <div class="char-select-title">&#x1F3AD; 选择你的角色</div>
+    <div class="char-select-subtitle">— 每个角色拥有独特技能 —</div>
+    <div class="char-select-grid" id="startCharSelectGrid"></div>
+    <button class="char-select-confirm" onclick="closeStartCharSelect()">&#x2726; 确认选择</button>
+  </div>
+</div>
+
+<div class="lobby-screen" id="lobbyScreen">
+  <div class="lobby-bg">
+    <img src="./image/玩家1.jpg" alt="背景" id="lobbyCharBg">
+    <div class="lobby-bg-overlay"></div>
+  </div>
+  <div class="lobby-top-bar">
+    <div class="lobby-back-btn" onclick="closeLobby()">&#x2190; 返回</div>
+    <div class="lobby-logo">
+      <span class="lobby-logo-icon">&#x1F3DB;</span>
+      <span class="lobby-logo-text">古藏</span>
+    </div>
+    <div class="lobby-balance">
+      <span class="lobby-balance-label">&#x1FA99; 金币</span>
+      <span class="lobby-balance-value" id="lobbyGold">3,000,000</span>
+    </div>
+  </div>
+
+  <div class="lobby-main-layout">
+    <div class="lobby-left">
+      <div class="lobby-char-showcase">
+        <div class="lobby-char-portrait">
+          <img src="./image/玩家1.jpg" alt="角色" id="lobbyCharImg">
+        </div>
+        <div class="lobby-char-info">
+          <h2 class="lobby-char-name" id="lobbyCharName">伊森</h2>
+          <div class="lobby-char-title" id="lobbyCharTitle">古董鉴定师</div>
+          <p class="lobby-char-bio" id="lobbyCharBio"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lobby-center">
+      <div class="lobby-thumbs" id="lobbyThumbs"></div>
+    </div>
+
+    <div class="lobby-right">
+      <div class="lobby-skill-panel">
+        <div class="lobby-skill-header">&#x2728; 角色技能</div>
+        <div class="lobby-skill-body">
+          <img src="./image/玩家1.jpg" alt="头像" class="lobby-skill-avatar" id="lobbySkillAvatar">
+          <div class="lobby-skill-info">
+            <div class="lobby-skill-name" id="lobbySkillName">伊森</div>
+            <div class="lobby-skill-desc" id="lobbySkillDesc"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lobby-pocket-panel">
+        <div class="lobby-pocket-header">&#x1F4E6; 口袋物品</div>
+        <div class="lobby-pocket-slots" id="lobbyPocketSlots"></div>
+        <div class="lobby-pocket-count" id="lobbyPocketCount">0 / 5</div>
+      </div>
+
+      <button class="lobby-start-btn" onclick="lobbyStartGame()">&#x1F525; 开始竞拍</button>
+    </div>
+  </div>
+</div>
+
+<div class="numpad-overlay" id="numpadOverlay">
+  <div class="numpad-close" id="numpadClose">&#x2715;</div>
+  <div class="numpad">
+    <div class="numpad-display" id="numpadDisplay"><span class="hint">输入出价金额</span></div>
+    <div class="numpad-grid">
+      <div class="numpad-key" data-digit="7">7</div>
+      <div class="numpad-key" data-digit="8">8</div>
+      <div class="numpad-key" data-digit="9">9</div>
+      <div class="numpad-key key-clear" id="numpadKeyClear">C</div>
+      <div class="numpad-key" data-digit="4">4</div>
+      <div class="numpad-key" data-digit="5">5</div>
+      <div class="numpad-key" data-digit="6">6</div>
+      <div class="numpad-key" data-digit="00">00</div>
+      <div class="numpad-key" data-digit="1">1</div>
+      <div class="numpad-key" data-digit="2">2</div>
+      <div class="numpad-key" data-digit="3">3</div>
+      <div class="numpad-key" data-digit="000">000</div>
+      <div class="numpad-key" data-digit="0" style="grid-column:span 2">0</div>
+      <div class="numpad-key key-confirm" id="numpadKeyConfirm" style="grid-column:span 2">确认</div>
+    </div>
+    <div class="numpad-quick-row">
+      <div class="numpad-quick" data-amount="300000">30w</div>
+      <div class="numpad-quick" data-amount="600000">60w</div>
+      <div class="numpad-quick" data-amount="900000">90w</div>
+    </div>
+  </div>
+</div>
+
+<div class="game-wrapper">
+  <aside class="glass-panel">
+    <div class="panel-header">
+      <span>&#x2694; 竞拍者</span>
+      <span class="panel-header-right">
+        <span class="shop-entry" id="shopEntryBtn">&#x1F6D2; 商城</span>
+        <span id="roundInfo">第 1/5 轮</span>
+      </span>
+    </div>
+    <div id="playerList">
+      <div class="player-card active" data-player="me">
+        <div class="avatar-frame active-frame"><img src="./image/玩家1.jpg" alt="我"></div>
+        <div class="player-info">
+          <div class="player-name">伊森 (你)</div>
+          <div class="p-money">¥ <span id="myMoney">3,000,000</span></div>
+          <div class="p-hafcoins"><span class="haf-icon"></span> 哈夫币 <span id="myHafCoins">0</span></div>
+          <div class="p-status" id="myStatus">准备就绪</div>
+          <div class="item-bar" data-player="me"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="ai1">
+        <div class="avatar-frame"><img src="./image/玩家2.jpg" alt="AI1"></div>
+        <div class="player-info">
+          <div class="player-name">落日余晖</div>
+          <div class="p-money">¥ <span id="ai1Money">2,500,000</span></div>
+          <div class="p-status" id="ai1Status">等待中...</div>
+          <div class="item-bar" data-player="ai1"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="ai2">
+        <div class="avatar-frame"><img src="./image/玩家3.png" alt="AI2"></div>
+        <div class="player-info">
+          <div class="player-name">甜心炸弹</div>
+          <div class="p-money">¥ <span id="ai2Money">1,800,000</span></div>
+          <div class="p-status" id="ai2Status">等待中...</div>
+          <div class="item-bar" data-player="ai2"></div>
+        </div>
+      </div>
+      <div class="player-card" data-player="ai3">
+        <div class="avatar-frame"><img src="./image/玩家4.png" alt="AI3"></div>
+        <div class="player-info">
+          <div class="player-name">深海猎手</div>
+          <div class="p-money">¥ <span id="ai3Money">3,200,000</span></div>
+          <div class="p-status" id="ai3Status">等待中...</div>
+          <div class="item-bar" data-player="ai3"></div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-arena">
+    <div class="glass-panel auction-top">
+      <div class="round-badge">
+        <span class="round-num" id="roundTag">第 1 轮</span>
+      </div>
+      <div class="price-label">当前最高出价</div>
+      <div class="top-price"><span class="currency">¥</span> <span id="topPrice">0</span></div>
+      <div class="bidder-name" id="topBidder"></div>
+    </div>
+
+    <div id="bid-logs"></div>
+
+    <div class="bid-panel">
+      <div class="bid-input-row">
+        <div class="bid-input-area">
+          <div class="bid-input-display" id="bidDisplay">输入金额...</div>
+        </div>
+        <div class="quick-btns">
+          <div class="quick-btn" data-amount="300000">30w</div>
+          <div class="quick-btn" data-amount="600000">60w</div>
+          <div class="quick-btn" data-amount="900000">90w</div>
+        </div>
+      </div>
+      <div class="bid-actions">
+        <button class="btn-confirm" id="btnConfirm">确认出价</button>
+        <button class="btn-pass" id="btnPass">跳过</button>
+      </div>
+    </div>
+  </main>
+
+  <aside class="glass-panel">
+    <div class="panel-header">
+      <span>&#x1F3DB; 藏品矩阵</span>
+      <span class="panel-header-right">
+        <span class="map-entry" id="mapEntryBtn">&#x1F5FA;&#xFE0F; 仓库地图</span>
+        <span id="scanStatus">READY</span>
+      </span>
+    </div>
+    <div class="inventory-zone">
+      <div class="wh-grid-6" id="previewGrid"></div>
+    </div>
+  </aside>
+</div>
+
+<div class="modal" id="settleModal">
+  <div class="settle-row">
+    <div class="settle-left">
+      <div id="settleTitle" class="settle-title">竞拍成功</div>
+      <div class="settle-label">成交价格</div>
+      <div class="info-val" id="settleCost">¥ 0</div>
+      <div class="settle-label">藏品总估值</div>
+      <div class="info-val" id="settleTotalVal">¥ 0</div>
+      <div id="settleProfitLabel" class="settle-label">利润</div>
+      <div class="profit-number" id="settleProfit">¥ 0</div>
+    </div>
+    <div class="settle-center">
+      <div class="settle-header">
+        <span class="settle-header-label">藏品清单</span>
+        <span id="settleFooter" class="settle-header-value">&#x1FA99; 0</span>
+      </div>
+      <div class="wh-grid-settle" id="settleGrid"></div>
+      <button class="btn-confirm" id="btnNextRound" style="width:100%;margin:8px 0 0;padding:10px;font-size:14px;">重新开始</button>
+    </div>
+    <div class="settle-right">
+      <img src="./image/拍卖师.png" alt="拍卖师">
+    </div>
+  </div>
+</div>
+
+<div class="map-overlay" id="mapOverlay">
+  <div class="map-home-layout">
+    <div class="map-home-left">
+      <img src="./image/仓库地图.png" alt="仓库地图">
+      <div class="map-img-badge"><span class="badge-dot"></span>仓库全局地图</div>
+    </div>
+    <div class="map-close-top" id="mapCloseTop">&#x2715;</div>
+    <div class="map-home-right">
+      <div class="map-title-section">
+        <div class="map-title-main">&#x1F5FA;&#xFE0F; 仓库密藏抽取</div>
+        <div class="map-title-sub">— 正中方框中的仓库即为本次拍卖仓库 —</div>
+      </div>
+      <div class="map-track-container">
+        <div class="white-frame">
+          <div class="frame-label">&#x2B07; 拍卖仓库</div>
+        </div>
+        <div class="map-track-shadow-left"></div>
+        <div class="map-track-shadow-right"></div>
+        <div class="map-track" id="mapTrack"></div>
+      </div>
+      <div class="map-controls">
+        <button class="map-start-btn" id="mapStartBtn">&#x1F3B2; 随机抽取地图</button>
+        <div class="map-result" id="mapResult"></div>
+        <button class="map-close-btn" id="mapCloseBtn">&#x2715; 关闭</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="char-select-btn" id="charSelectBtn">
+  <div class="char-btn-ring"></div>
+  <img src="./image/玩家1.jpg" alt="角色" id="charBtnAvatar">
+</div>
+
+<div class="char-overlay" id="charOverlay">
+  <div class="char-home-layout">
+    <div class="char-home-bg">
+      <img src="./image/仓库地图.png" alt="背景">
+    </div>
+    <div class="char-close-top" id="charCloseTop">&#x2715;</div>
+    <div class="char-home-content">
+      <div class="char-title-section">
+        <div class="char-title-main">&#x1F3AD; 选择你的角色</div>
+        <div class="char-title-sub">— 滑动选择，确认你的竞拍身份 —</div>
+      </div>
+      <div class="char-track-container">
+        <div class="char-white-frame">
+          <div class="frame-label">&#x2B07; 当前角色</div>
+        </div>
+        <div class="char-track-shadow-left"></div>
+        <div class="char-track-shadow-right"></div>
+        <div class="char-track" id="charTrack"></div>
+      </div>
+      <div class="char-controls">
+        <button class="char-confirm-btn" id="charConfirmBtn">&#x2726; 确认选择</button>
+        <div class="char-hint">左右滑动浏览角色 · 点击卡片选择</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="shop-overlay" id="shopOverlay">
+  <div class="shop-panel">
+    <div class="shop-close" id="shopClose">&#x2715;</div>
+    <div class="shop-title">&#x1F6D2; 哈夫商城</div>
+    <div class="shop-subtitle">用拍卖赚来的哈夫币购买强力道具</div>
+    <div class="shop-balance">
+      <div class="bal-label">我的哈夫币</div>
+      <div class="bal-val"><span id="shopHafCoins">0</span></div>
+    </div>
+    <div class="shop-items" id="shopItems"></div>
+    <div class="shop-inventory">
+      <div class="shop-inv-title">&#x1F4E6; 当前物品栏（数字键 1-5 使用）</div>
+      <div class="shop-inv-slots" id="shopInvSlots"></div>
+    </div>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-icon" id="confirmIcon">&#x1F50D;</div>
+    <div class="confirm-title" id="confirmTitle">使用物品</div>
+    <div class="confirm-desc" id="confirmDesc">确定要使用这个物品吗？</div>
+    <div class="confirm-actions">
+      <button class="confirm-yes" id="confirmYes">确认使用</button>
+      <button class="confirm-no" id="confirmNo">取消</button>
+    </div>
+  </div>
+</div>
+
+<script src="scripts/gameState.js"></script>
+<script src="scripts/audioSystem.js"></script>
+<script src="scripts/uiHelpers.js"></script>
+<script src="scripts/numpad.js"></script>
+<script src="scripts/skillSystem.js"></script>
+<script src="scripts/itemSystem.js"></script>
+<script src="scripts/confirmDialog.js"></script>
+<script src="scripts/shopSystem.js"></script>
+<script src="scripts/bidSystem.js"></script>
+<script src="scripts/settlementSystem.js"></script>
+<script src="scripts/mapSystem.js"></script>
+<script src="scripts/characterSystem.js"></script>
+<script src="scripts/startScreen.js"></script>
+<script src="scripts/lobbySystem.js"></script>
+<script src="scripts/gameInit.js"></script>
+</body>
+</html>
