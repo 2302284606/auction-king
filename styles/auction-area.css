@@ -19,6 +19,17 @@
 .quick-btns{display:flex;flex-direction:column;gap:5px}
 .quick-btn{padding:8px 4px;background:#1a1508;border:1px solid #665018;color:#ffd700;font-size:12px;font-weight:700;cursor:pointer;border-radius:3px;transition:0.15s;white-space:nowrap;width:58px;text-align:center}
 .quick-btn:hover,.quick-btn:active{background:#2a2008;border-color:#ffd700}
+.bid-multiplier-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid #1a1a1a}
+.multiplier-label{color:#888;font-size:11px;font-weight:600;letter-spacing:1px;white-space:nowrap}
+.multiplier-quick-btns{display:flex;gap:4px;flex:1;overflow-x:auto}
+.multiplier-quick-btns::-webkit-scrollbar{display:none}
+.multiplier-btn{padding:5px 10px;background:#0d1117;border:1px solid #2a2a2a;color:#888;font-size:11px;font-weight:700;cursor:pointer;border-radius:3px;transition:0.15s;white-space:nowrap;user-select:none}
+.multiplier-btn:hover{border-color:#ffd700;color:#ffd700;background:#1a1508}
+.multiplier-btn.active{border-color:#ffd700;color:#ffd700;background:#1a1508;box-shadow:0 0 8px rgba(255,215,0,0.15)}
+.multiplier-input{width:52px;padding:5px 6px;background:#0a0a0a;border:1px solid #333;color:#ffd700;font-size:12px;font-weight:700;text-align:center;border-radius:3px;outline:none;transition:0.2s}
+.multiplier-input:focus{border-color:#ffd700;box-shadow:0 0 8px rgba(255,215,0,0.1)}
+.multiplier-x{color:#555;font-size:13px;font-weight:700}
+.multiplier-result{color:#00e676;font-size:13px;font-weight:700;white-space:nowrap;min-width:90px;text-align:right}
 .bid-actions{display:flex;gap:8px}
 .btn-confirm{flex:1;padding:14px;background:linear-gradient(135deg,#d4a017,#f5c542);color:#000;border:none;font-size:17px;font-weight:900;cursor:pointer;border-radius:4px;letter-spacing:3px;transition:0.2s;text-shadow:0 1px 0 rgba(255,255,255,0.2)}
 .btn-confirm:hover,.btn-confirm:active{transform:translateY(-1px);box-shadow:0 4px 20px rgba(212,160,23,0.4)}

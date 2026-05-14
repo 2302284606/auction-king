@@ -9,6 +9,7 @@ var gameState = {
   gridItems: [],
   isBidding: false,
   bidAmount: 0,
+  bidMultiplier: 1.0,
   roundHistory: [],
   playerCharId: 'ethan'
 };

@@ -46,6 +46,7 @@ function restartGame() {
     gridItems: [],
     isBidding: false,
     bidAmount: 0,
+    bidMultiplier: 1.0,
     roundHistory: [],
     playerCharId: savedCharId
   };
@@ -57,6 +58,11 @@ function restartGame() {
 
   document.getElementById('bidDisplay').textContent = '输入金额...';
   document.getElementById('bidDisplay').style.color = '#ffd700';
+  document.getElementById('multiplierInput').value = '1.0';
+  document.getElementById('multiplierResult').textContent = '= ¥ 0';
+  document.querySelectorAll('.multiplier-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-multiplier') === '1.0');
+  });
   document.getElementById('topPrice').textContent = '0';
   document.getElementById('topBidder').textContent = '';
   document.getElementById('btnConfirm').disabled = false;

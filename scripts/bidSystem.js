@@ -25,13 +25,23 @@ function generateAIBids(isPreliminary) {
   return bids;
 }
 
+function getEffectiveBid() {
+  return Math.floor(gameState.bidAmount * gameState.bidMultiplier);
+}
+
+function updateMultiplierResult() {
+  var effective = getEffectiveBid();
+  document.getElementById('multiplierResult').textContent = '= ¥ ' + effective.toLocaleString();
+}
+
 function confirmBid() {
   if (gameState.isBidding) return;
   if (!gameState.bidAmount) {
     openNumpad();
     return;
   }
-  if (gameState.bidAmount > gameState.money) {
+  var effectiveBid = getEffectiveBid();
+  if (effectiveBid > gameState.money) {
     addLog('system', '余额不足！当前余额 ¥' + gameState.money.toLocaleString());
     openNumpad();
     return;
@@ -42,10 +52,14 @@ function confirmBid() {
 
   playGavel();
 
-  addLog('system', '⚡ 一锤定音！出价锁定！');
+  if (gameState.bidMultiplier > 1) {
+    addLog('system', '⚡ 一锤定音！出价锁定！（×' + gameState.bidMultiplier + ' 倍数已应用）');
+  } else {
+    addLog('system', '⚡ 一锤定音！出价锁定！');
+  }
 
   var aiBids = generateAIBids(false);
-  var myBid = { name: '你', val: gameState.bidAmount, isMe: true };
+  var myBid = { name: '你', val: effectiveBid, isMe: true };
   var allBids = [myBid].concat(aiBids).sort(function(a, b) { return b.val - a.val; });
 
   document.getElementById('topPrice').textContent = allBids[0].val.toLocaleString();
@@ -136,11 +150,18 @@ function skipRound() {
 function resetBidUI() {
   gameState.isBidding = false;
   gameState.bidAmount = 0;
+  gameState.bidMultiplier = 1.0;
   document.getElementById('bidDisplay').textContent = '输入金额...';
   document.getElementById('bidDisplay').style.color = '#ffd700';
   document.getElementById('topPrice').textContent = '0';
   document.getElementById('topBidder').textContent = '';
   document.getElementById('btnConfirm').disabled = false;
+
+  document.getElementById('multiplierInput').value = '1.0';
+  document.getElementById('multiplierResult').textContent = '= ¥ 0';
+  document.querySelectorAll('.multiplier-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-multiplier') === '1.0');
+  });
 
   document.querySelectorAll('.player-card').forEach(function(c) { c.classList.remove('winner-card', 'loser-card'); });
   document.getElementById('myStatus').textContent = '准备就绪';
@@ -156,5 +177,55 @@ function initBidListeners() {
 
   document.getElementById('btnPass').addEventListener('click', function() {
     skipRound();
+  });
+
+  initMultiplierListeners();
+}
+
+function initMultiplierListeners() {
+  document.querySelectorAll('.multiplier-btn[data-multiplier]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      if (gameState.isBidding) return;
+      var val = parseFloat(this.getAttribute('data-multiplier'));
+      gameState.bidMultiplier = val;
+      document.getElementById('multiplierInput').value = val;
+      document.querySelectorAll('.multiplier-btn').forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      updateMultiplierResult();
+    });
+  });
+
+  var input = document.getElementById('multiplierInput');
+  input.addEventListener('focus', function() { this.select(); });
+  input.addEventListener('input', function() {
+    if (gameState.isBidding) return;
+    var raw = this.value.replace(/[^0-9.]/g, '');
+    var parts = raw.split('.');
+    if (parts.length > 2) raw = parts[0] + '.' + parts.slice(1).join('');
+    this.value = raw;
+    var val = parseFloat(raw);
+    if (!isNaN(val) && val >= 0.1 && val <= 10) {
+      gameState.bidMultiplier = val;
+      document.querySelectorAll('.multiplier-btn').forEach(function(b) {
+        b.classList.toggle('active', parseFloat(b.getAttribute('data-multiplier')) === val);
+      });
+      updateMultiplierResult();
+    }
+  });
+  input.addEventListener('blur', function() {
+    if (gameState.isBidding) return;
+    var val = parseFloat(this.value);
+    if (isNaN(val) || val < 0.1) val = 1.0;
+    if (val > 10) val = 10;
+    val = Math.round(val * 10) / 10;
+    gameState.bidMultiplier = val;
+    this.value = val;
+    document.querySelectorAll('.multiplier-btn').forEach(function(b) {
+      b.classList.toggle('active', parseFloat(b.getAttribute('data-multiplier')) === val);
+    });
+    updateMultiplierResult();
+  });
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') { this.blur(); }
   });
 }

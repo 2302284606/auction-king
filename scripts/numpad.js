@@ -38,6 +38,7 @@ function numpadConfirm() {
   gameState.bidAmount = num;
   document.getElementById('bidDisplay').textContent = '¥ ' + num.toLocaleString();
   document.getElementById('bidDisplay').style.color = '#ffd700';
+  updateMultiplierResult();
   closeNumpad();
 }
 
@@ -47,6 +48,7 @@ function quickBid(val) {
   numpadValue = val.toString();
   document.getElementById('bidDisplay').textContent = '¥ ' + val.toLocaleString();
   document.getElementById('bidDisplay').style.color = '#ffd700';
+  updateMultiplierResult();
   closeNumpad();
 }
 
