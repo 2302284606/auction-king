@@ -5,8 +5,10 @@ function init() {
   for (var i = 0; i < 60; i++) {
     var cell = document.createElement('div');
     cell.className = 'wh-cell';
+    var gi = pickItem();
+    cell.style.setProperty('--cell-silhouette', 'url(' + gi.src + ')');
     grid.appendChild(cell);
-    gameState.gridItems.push(pickItem());
+    gameState.gridItems.push(gi);
   }
   assignItems();
   renderAllPlayerItems();
@@ -160,8 +162,10 @@ function resetGameUI() {
   for (var i = 0; i < 60; i++) {
     var cell = document.createElement('div');
     cell.className = 'wh-cell';
+    var gi2 = pickItem();
+    cell.style.setProperty('--cell-silhouette', 'url(' + gi2.src + ')');
     grid.appendChild(cell);
-    gameState.gridItems.push(pickItem());
+    gameState.gridItems.push(gi2);
   }
 
   assignItems();

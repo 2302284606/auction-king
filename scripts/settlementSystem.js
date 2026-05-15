@@ -153,6 +153,7 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
   items.forEach(function(item) {
     var cell = document.createElement('div');
     cell.className = 'settle-cell';
+    cell.style.setProperty('--cell-silhouette', 'url(' + item.src + ')');
     var gs = item.gridSize || 1;
     cell.style.gridColumn = 'span ' + gs;
     cell.style.aspectRatio = gs + ' / 1';
@@ -178,6 +179,13 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
     priceTag.className = 'item-price-tag';
     priceTag.textContent = '¥' + item.value.toLocaleString();
     cell.appendChild(priceTag);
+
+    var nameEl = document.createElement('div');
+    nameEl.className = 'settle-item-name';
+    var srcParts = item.src.split('/');
+    var nameText = srcParts[srcParts.length - 1].replace(/\.\w+$/, '').replace(/^\d+$/, '藏品');
+    nameEl.textContent = nameText;
+    cell.appendChild(nameEl);
 
     if (item.rarity === 'gold') cell.classList.add('rarity-gold');
     else if (item.rarity === 'red') cell.classList.add('rarity-red');

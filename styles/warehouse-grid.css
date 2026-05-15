@@ -4,6 +4,9 @@
 .wh-cell{border:1px solid rgba(0,255,255,0.06);background:transparent;position:relative;display:flex;align-items:center;justify-content:center;transition:0.3s}
 .wh-cell::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,255,0.02),transparent);opacity:0;transition:0.3s;pointer-events:none}
 .wh-cell:hover::before{opacity:1}
+.wh-cell::after{content:'';position:absolute;inset:8%;background:var(--cell-silhouette) center/contain no-repeat;filter:brightness(0) saturate(0);opacity:0.18;pointer-events:none;z-index:0;transition:opacity 0.3s}
+.wh-cell.scan-active::after,.wh-cell.actuary-active::after{opacity:0.06}
+.wh-cell.scan-reveal-gold::after,.wh-cell.scan-reveal-red::after,.wh-cell.scan-reveal-normal::after{opacity:0}
 .wh-cell.scan-active{border:1px solid var(--cyber-cyan);outline:1px solid var(--cyber-cyan);outline-offset:-1px;background:rgba(0,255,255,0.08);z-index:5;box-shadow:0 0 15px rgba(0,255,255,0.2),inset 0 0 15px rgba(0,255,255,0.05);animation:neonPulse 1.5s ease-in-out infinite}
 .wh-cell.actuary-active{border:1px solid var(--cyber-neon-green);outline:1px solid var(--cyber-neon-green);outline-offset:-1px;background:rgba(57,255,20,0.08);z-index:6;box-shadow:0 0 15px rgba(57,255,20,0.2),inset 0 0 15px rgba(57,255,20,0.05);animation:neonPulse 1.5s ease-in-out infinite}
 .wh-cell.scan-reveal-gold{border:1px solid var(--cyber-gold);background:rgba(255,215,0,0.06);box-shadow:inset 0 0 10px rgba(255,215,0,0.08),0 0 10px rgba(255,215,0,0.15)}
