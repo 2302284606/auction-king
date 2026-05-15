@@ -74,7 +74,7 @@ class GitSyncApp:
         try:
             result = subprocess.run(
                 cmd, shell=True, cwd=WORK_DIR,
-                capture_output=True, text=True, timeout=120
+                capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120
             )
             if result.stdout.strip():
                 self._log(result.stdout.strip())
@@ -106,7 +106,7 @@ class GitSyncApp:
         try:
             result = subprocess.run(
                 f"git remote get-url {REMOTE_NAME}",
-                shell=True, cwd=WORK_DIR, capture_output=True, text=True
+                shell=True, cwd=WORK_DIR, capture_output=True, text=True, encoding="utf-8", errors="replace"
             )
             if result.returncode == 0:
                 url = result.stdout.strip()
@@ -125,7 +125,7 @@ class GitSyncApp:
 
         existing = subprocess.run(
             f"git remote get-url {REMOTE_NAME}",
-            shell=True, cwd=WORK_DIR, capture_output=True, text=True
+            shell=True, cwd=WORK_DIR, capture_output=True, text=True, encoding="utf-8", errors="replace"
         )
         if existing.returncode == 0:
             self._run(f"git remote set-url {REMOTE_NAME} {url}")
@@ -168,7 +168,7 @@ class GitSyncApp:
 
                 check_remote = subprocess.run(
                     f"git remote get-url {REMOTE_NAME}",
-                    shell=True, cwd=WORK_DIR, capture_output=True, text=True
+                    shell=True, cwd=WORK_DIR, capture_output=True, text=True, encoding="utf-8", errors="replace"
                 )
                 if check_remote.returncode != 0:
                     self._log("[错误] 未设置远程仓库，请先设置")
@@ -193,7 +193,7 @@ class GitSyncApp:
             try:
                 check_remote = subprocess.run(
                     f"git remote get-url {REMOTE_NAME}",
-                    shell=True, cwd=WORK_DIR, capture_output=True, text=True
+                    shell=True, cwd=WORK_DIR, capture_output=True, text=True, encoding="utf-8", errors="replace"
                 )
                 if check_remote.returncode != 0:
                     self._log("[错误] 未设置远程仓库，请先设置")

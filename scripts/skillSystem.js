@@ -1,5 +1,6 @@
 function activateShadowScan() {
   if (gameState.isBidding) return;
+  if (gameState.playerCharId !== 'ethan') return;
   var ch = characterData.find(function(c) { return c.id === gameState.playerCharId; }) || characterData[0];
   addSkillLog(ch.name, '空间残影', '正在探测矩阵中的隐藏结构...');
   var cells = document.querySelectorAll('#previewGrid .wh-cell');

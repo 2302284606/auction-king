@@ -17,8 +17,8 @@ var gameState = {
 var ROUND_RULES = [
   { label: '第一名 ≥ 第二名 × 2.0', threshold: 2.0, desc: '第一轮·翻倍成交' },
   { label: '第一名 ≥ 第二名 × 1.8', threshold: 1.8, desc: '第二轮·1.8倍成交' },
-  { label: '第一名 ≥ 第二名 × 0.5', threshold: 0.5, desc: '第三轮·半价成交' },
-  { label: '第一名 ≥ 第二名 × 0.2', threshold: 0.2, desc: '第四轮·二折成交' },
+  { label: '第一名 ≥ 第二名 × 1.5', threshold: 1.5, desc: '第三轮·1.5倍成交' },
+  { label: '第一名 ≥ 第二名 × 1.2', threshold: 1.2, desc: '第四轮·1.2倍成交' },
   { label: '第一名 > 第二名（高¥1）', threshold: 0, desc: '第五轮·加1元成交', special: true }
 ];
 
