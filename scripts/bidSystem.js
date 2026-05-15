@@ -1,3 +1,60 @@
+function startCountdown() {
+  if (gameState.isCountdownActive) return;
+  
+  gameState.countdownTime = 30;
+  gameState.isCountdownActive = true;
+  
+  var countdownNumber = document.getElementById('countdownNumber');
+  var countdownProgressBar = document.getElementById('countdownProgressBar');
+  var countdownContainer = document.getElementById('countdownContainer');
+  
+  if (!countdownNumber || !countdownProgressBar || !countdownContainer) return;
+  
+  countdownContainer.style.display = 'block';
+  countdownNumber.textContent = gameState.countdownTime;
+  countdownProgressBar.style.width = '100%';
+  countdownContainer.classList.remove('countdown-warning', 'countdown-critical');
+  
+  gameState.countdownTimer = setInterval(function() {
+    gameState.countdownTime--;
+    countdownNumber.textContent = gameState.countdownTime;
+    
+    var progressPercent = (gameState.countdownTime / 30) * 100;
+    countdownProgressBar.style.width = progressPercent + '%';
+    
+    if (gameState.countdownTime <= 10) {
+      countdownContainer.classList.add('countdown-warning');
+      countdownContainer.classList.remove('countdown-critical');
+    }
+    
+    if (gameState.countdownTime <= 5) {
+      countdownContainer.classList.add('countdown-critical');
+      countdownContainer.classList.remove('countdown-warning');
+    }
+    
+    if (gameState.countdownTime <= 0) {
+      stopCountdown();
+      if (!gameState.isBidding) {
+        addLog('system', '⏰ 时间到！自动跳过本轮出价');
+        skipRound();
+      }
+    }
+  }, 1000);
+}
+
+function stopCountdown() {
+  if (gameState.countdownTimer) {
+    clearInterval(gameState.countdownTimer);
+    gameState.countdownTimer = null;
+  }
+  gameState.isCountdownActive = false;
+  
+  var countdownContainer = document.getElementById('countdownContainer');
+  if (countdownContainer) {
+    countdownContainer.classList.remove('countdown-warning', 'countdown-critical');
+  }
+}
+
 function generateAIBids(isPreliminary) {
   var round = gameState.currentRound;
   var baseMoney = gameState.money;
@@ -49,6 +106,7 @@ function confirmBid() {
 
   gameState.isBidding = true;
   document.getElementById('btnConfirm').disabled = true;
+  stopCountdown();
 
   playGavel();
 
@@ -91,6 +149,7 @@ function skipRound() {
   if (gameState.isBidding) return;
   addLog('system', '⏭ 你跳过了本轮出价');
   document.getElementById('myStatus').textContent = '跳过本轮';
+  stopCountdown();
 
   var aiBids = generateAIBids(false);
   aiBids.sort(function(a, b) { return b.val - a.val; });
@@ -156,6 +215,7 @@ function resetBidUI() {
   document.getElementById('topPrice').textContent = '0';
   document.getElementById('topBidder').textContent = '';
   document.getElementById('btnConfirm').disabled = false;
+  stopCountdown();
 
   document.getElementById('multiplierInput').value = '1.0';
   document.getElementById('multiplierResult').textContent = '= ¥ 0';

@@ -1,3 +1,18 @@
+function rollNumber(el, target, prefix, suffix, duration) {
+  prefix = prefix || '';
+  suffix = suffix || '';
+  duration = duration || 800;
+  var start = performance.now();
+  function tick(now) {
+    var progress = Math.min((now - start) / duration, 1);
+    var eased = 1 - Math.pow(1 - progress, 3);
+    var current = Math.round(target * eased);
+    el.textContent = prefix + current.toLocaleString() + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
 function resolveAuction(allBids) {
   var round = gameState.currentRound;
   var rule = ROUND_RULES[round - 1];
@@ -98,23 +113,22 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
 
   if (isMeWin) {
     titleEl.textContent = '🎉 竞拍成功';
-    titleEl.style.color = '#44ff44';
+    titleEl.style.color = 'var(--cyber-neon-green)';
     if (profit >= 0) {
       labelEl.innerHTML = '🔥 利润';
       profitEl.className = 'profit-number green';
-      profitEl.textContent = '+¥ ' + profit.toLocaleString();
+      rollNumber(profitEl, profit, '+¥ ');
     } else {
       labelEl.innerHTML = '💔 亏损';
       profitEl.className = 'profit-number red';
-      profitEl.textContent = '-¥ ' + Math.abs(profit).toLocaleString();
+      rollNumber(profitEl, Math.abs(profit), '-¥ ');
     }
   } else {
     titleEl.textContent = '😔 竞拍失败';
-    titleEl.style.color = '#ff4444';
+    titleEl.style.color = 'var(--cyber-hot)';
     labelEl.innerHTML = '对方所得';
     profitEl.className = 'profit-number red';
-    profitEl.style.color = '#ff4444';
-    profitEl.textContent = '¥ ' + profit.toLocaleString();
+    rollNumber(profitEl, profit, '¥ ');
   }
 
   document.getElementById('settleFooter').textContent = '🪙 ' + totalVal.toLocaleString();
@@ -129,6 +143,8 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
   items.forEach(function(item) {
     var cell = document.createElement('div');
     cell.className = 'settle-cell';
+    var gs = item.gridSize || 1;
+    cell.style.gridColumn = 'span ' + gs;
 
     var loader = document.createElement('div');
     loader.className = 'circle-loader';
@@ -141,6 +157,16 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
     img.src = item.src;
     img.alt = '藏品';
     cell.appendChild(img);
+
+    var badge = document.createElement('div');
+    badge.className = 'grid-size-badge';
+    badge.textContent = '×' + gs;
+    cell.appendChild(badge);
+
+    var priceTag = document.createElement('div');
+    priceTag.className = 'item-price-tag';
+    priceTag.textContent = '¥' + item.value.toLocaleString();
+    cell.appendChild(priceTag);
 
     if (item.rarity === 'gold') cell.classList.add('rarity-gold');
     else if (item.rarity === 'red') cell.classList.add('rarity-red');
@@ -171,6 +197,22 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
   });
 
   var btn = document.getElementById('btnNextRound');
-  btn.textContent = '🔄 重新开始';
-  btn.onclick = restartGame;
+  var remainingEl = document.getElementById('settleRemaining');
+  var gameBadge = document.getElementById('settleGameBadge');
+  if (gameBadge) gameBadge.textContent = '第 ' + gameState.gameNumber + ' 局';
+
+  var remainingMoney = gameState.money;
+  if (remainingMoney <= 0) {
+    remainingEl.className = 'settle-remaining settle-game-over';
+    remainingEl.innerHTML = '<span class="remain-label">资金归零</span><div class="settle-remain-amount">💀 游戏结束</div>你在第 ' + gameState.gameNumber + ' 局耗尽了所有资金...';
+    btn.textContent = '🔄 重新开始';
+    btn.onclick = restartGame;
+  } else {
+    remainingEl.className = 'settle-remaining';
+    remainingEl.innerHTML = '<span class="remain-label">当前剩余资金</span><div class="settle-remain-amount">¥ 0</div>';
+    var remainAmountEl = remainingEl.querySelector('.settle-remain-amount');
+    rollNumber(remainAmountEl, remainingMoney, '¥ ');
+    btn.textContent = '▶ 开始第 ' + (gameState.gameNumber + 1) + ' 局';
+    btn.onclick = nextGame;
+  }
 }

@@ -28,18 +28,55 @@ function initRound(round) {
   aiUseItem('ai3');
 
   activateShadowScan();
+  startCountdown();
+}
+
+function nextGame() {
+  document.getElementById('settleModal').classList.remove('show');
+
+  var savedCharId = gameState.playerCharId || 'ethan';
+  var carriedMoney = gameState.money;
+  var carriedHafCoins = gameState.hafCoins;
+  var newGameNumber = gameState.gameNumber + 1;
+
+  gameState = {
+    currentRound: 1,
+    maxRounds: 5,
+    gameNumber: newGameNumber,
+    money: carriedMoney,
+    aiMoney: INITIAL_AI_MONEY.slice(),
+    hafCoins: carriedHafCoins,
+    collectedItems: [],
+    collectedValues: [],
+    gridItems: [],
+    isBidding: false,
+    bidAmount: 0,
+    bidMultiplier: 1.0,
+    roundHistory: [],
+    playerCharId: savedCharId,
+    countdownTime: 30,
+    countdownTimer: null,
+    isCountdownActive: false
+  };
+
+  applyCharacterUI(savedCharId);
+  resetGameUI();
+  addLog('system', '🎮 第 ' + newGameNumber + ' 局开始！携带资金 ¥' + carriedMoney.toLocaleString());
+  openLobby();
 }
 
 function restartGame() {
   document.getElementById('settleModal').classList.remove('show');
 
   var savedCharId = gameState.playerCharId || 'ethan';
+  stopCountdown();
 
   gameState = {
     currentRound: 1,
     maxRounds: 5,
-    money: 3000000,
-    aiMoney: [2500000, 1800000, 3200000],
+    gameNumber: 1,
+    money: INITIAL_MONEY,
+    aiMoney: INITIAL_AI_MONEY.slice(),
     hafCoins: 0,
     collectedItems: [],
     collectedValues: [],
@@ -48,14 +85,26 @@ function restartGame() {
     bidAmount: 0,
     bidMultiplier: 1.0,
     roundHistory: [],
-    playerCharId: savedCharId
+    playerCharId: savedCharId,
+    countdownTime: 30,
+    countdownTimer: null,
+    isCountdownActive: false
   };
 
+  applyCharacterUI(savedCharId);
+  resetGameUI();
+  addLog('system', '🔄 游戏已重置，新的一局开始！');
+  openLobby();
+}
+
+function applyCharacterUI(savedCharId) {
   var ch = characterData.find(function(c) { return c.id === savedCharId; }) || characterData[0];
   document.querySelector('[data-player="me"] .avatar-frame img').src = ch.img;
   document.querySelector('[data-player="me"] .player-name').textContent = ch.name + ' (你)';
   document.getElementById('charBtnAvatar').src = ch.img;
+}
 
+function resetGameUI() {
   document.getElementById('bidDisplay').textContent = '输入金额...';
   document.getElementById('bidDisplay').style.color = '#ffd700';
   document.getElementById('multiplierInput').value = '1.0';
@@ -66,11 +115,12 @@ function restartGame() {
   document.getElementById('topPrice').textContent = '0';
   document.getElementById('topBidder').textContent = '';
   document.getElementById('btnConfirm').disabled = false;
-  document.getElementById('myMoney').textContent = '3,000,000';
-  document.getElementById('ai1Money').textContent = '2,500,000';
-  document.getElementById('ai2Money').textContent = '1,800,000';
-  document.getElementById('ai3Money').textContent = '3,200,000';
+  document.getElementById('myMoney').textContent = gameState.money.toLocaleString();
+  document.getElementById('ai1Money').textContent = INITIAL_AI_MONEY[0].toLocaleString();
+  document.getElementById('ai2Money').textContent = INITIAL_AI_MONEY[1].toLocaleString();
+  document.getElementById('ai3Money').textContent = INITIAL_AI_MONEY[2].toLocaleString();
   updateHafCoinsUI();
+  updateUI();
 
   document.querySelectorAll('.player-card').forEach(function(c) { c.classList.remove('winner-card', 'loser-card'); });
   document.getElementById('myStatus').textContent = '准备就绪';
@@ -93,9 +143,6 @@ function restartGame() {
 
   assignItems();
   renderAllPlayerItems();
-
-  addLog('system', '🔄 游戏已重置，新的一局开始！');
-  openLobby();
 }
 
 function initKeyboardListeners() {

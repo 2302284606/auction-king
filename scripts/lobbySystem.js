@@ -43,6 +43,8 @@ function renderLobby() {
   document.getElementById('lobbySkillDesc').textContent = LOBBY_SKILLS[ch.id] || '';
 
   document.getElementById('lobbyGold').textContent = gameState.money.toLocaleString();
+  var lobbyGameNum = document.getElementById('lobbyGameNum');
+  if (lobbyGameNum) lobbyGameNum.textContent = '第 ' + gameState.gameNumber + ' 局';
 
   renderLobbyThumbs();
   renderLobbyPocket();

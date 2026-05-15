@@ -12,12 +12,13 @@ function activateShadowScan() {
     for (var s = 0; s < 3; s++) {
       var start = Math.floor(Math.random() * 40) + 6;
       var shape = shapes[Math.floor(Math.random() * shapes.length)];
-      var item = collectionItems[Math.floor(Math.random() * collectionItems.length)];
+      var item = pickItem();
       shape.forEach(function(offset, idx) {
         if (cells[start + offset]) {
           cells[start + offset].classList.add('scan-active');
           if (idx === 0) {
-            cells[start + offset].innerHTML = '<img src="' + item.src + '" style="width:60%;height:60%;object-fit:contain;opacity:0.6;">';
+            var gs = item.gridSize || 1;
+            cells[start + offset].innerHTML = '<img src="' + item.src + '" style="width:60%;height:60%;object-fit:contain;opacity:0.6;"><div style="position:absolute;bottom:1px;right:2px;font-size:7px;color:#aaa;">×' + gs + '</div>';
           }
         }
       });

@@ -103,6 +103,7 @@
       <span class="lobby-logo-text">古藏</span>
     </div>
     <div class="lobby-balance">
+      <span class="lobby-game-num" id="lobbyGameNum">第 1 局</span>
       <span class="lobby-balance-label">&#x1FA99; 金币</span>
       <span class="lobby-balance-value" id="lobbyGold">3,000,000</span>
     </div>
@@ -182,6 +183,7 @@
     <div class="panel-header">
       <span>&#x2694; 竞拍者</span>
       <span class="panel-header-right">
+        <span class="game-number-badge" id="gameNumberBadge">第 1 局</span>
         <span class="shop-entry" id="shopEntryBtn">&#x1F6D2; 商城</span>
         <span id="roundInfo">第 1/5 轮</span>
       </span>
@@ -231,6 +233,15 @@
     <div class="glass-panel auction-top">
       <div class="round-badge">
         <span class="round-num" id="roundTag">第 1 轮</span>
+      </div>
+      <div class="countdown-container" id="countdownContainer">
+        <div class="countdown-display">
+          <span class="countdown-number" id="countdownNumber">30</span>
+          <span class="countdown-label">秒</span>
+        </div>
+        <div class="countdown-progress">
+          <div class="countdown-progress-bar" id="countdownProgressBar"></div>
+        </div>
       </div>
       <div class="price-label">当前最高出价</div>
       <div class="top-price"><span class="currency">¥</span> <span id="topPrice">0</span></div>
@@ -289,12 +300,16 @@
   <div class="settle-row">
     <div class="settle-left">
       <div id="settleTitle" class="settle-title">竞拍成功</div>
+      <div class="settle-game-info" id="settleGameInfo">
+        <span class="settle-game-badge" id="settleGameBadge">第 1 局</span>
+      </div>
       <div class="settle-label">成交价格</div>
       <div class="info-val" id="settleCost">¥ 0</div>
       <div class="settle-label">藏品总估值</div>
       <div class="info-val" id="settleTotalVal">¥ 0</div>
       <div id="settleProfitLabel" class="settle-label">利润</div>
       <div class="profit-number" id="settleProfit">¥ 0</div>
+      <div class="settle-remaining" id="settleRemaining"></div>
     </div>
     <div class="settle-center">
       <div class="settle-header">
@@ -373,16 +388,35 @@
 
 <div class="shop-overlay" id="shopOverlay">
   <div class="shop-panel">
-    <div class="shop-close" id="shopClose">&#x2715;</div>
-    <div class="shop-title">&#x1F6D2; 哈夫商城</div>
-    <div class="shop-subtitle">用拍卖赚来的哈夫币购买强力道具</div>
-    <div class="shop-balance">
-      <div class="bal-label">我的哈夫币</div>
-      <div class="bal-val"><span id="shopHafCoins">0</span></div>
+    <div class="shop-header">
+      <div class="shop-header-glow"></div>
+      <div class="shop-title-row">
+        <span class="shop-title-icon">&#x1F6D2;</span>
+        <div class="shop-title">哈夫商城</div>
+      </div>
+      <div class="shop-subtitle">用拍卖赚来的哈夫币购买强力道具</div>
+      <div class="shop-close" id="shopClose">&#x2715;</div>
     </div>
-    <div class="shop-items" id="shopItems"></div>
+    <div class="shop-balance-row">
+      <div class="shop-balance">
+        <span class="bal-icon">&#x1FA99;</span>
+        <div>
+          <div class="bal-label">我的哈夫币</div>
+          <div class="bal-val"><span id="shopHafCoins">0</span></div>
+        </div>
+      </div>
+      <div class="shop-item-count">背包 <strong id="shopSlotCount">0</strong>/5</div>
+    </div>
+    <div class="shop-tabs" id="shopTabs"></div>
+    <div class="shop-body" id="shopBody">
+      <div class="shop-featured" id="shopFeatured"></div>
+      <div class="shop-items" id="shopItems"></div>
+    </div>
     <div class="shop-inventory">
-      <div class="shop-inv-title">&#x1F4E6; 当前物品栏（数字键 1-5 使用）</div>
+      <div class="shop-inv-header">
+        <div class="shop-inv-title"><span class="inv-icon">&#x1F4E6;</span> 当前物品栏</div>
+        <div class="shop-inv-hint">数字键 1-5 使用</div>
+      </div>
       <div class="shop-inv-slots" id="shopInvSlots"></div>
     </div>
   </div>

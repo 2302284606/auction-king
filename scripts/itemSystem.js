@@ -46,6 +46,12 @@ function useItem(playerId, slotIdx) {
     inspectItems(2, playerId);
   } else if (item.type === 3) {
     revealCellsRarity(5, playerId);
+  } else if (item.type === 4) {
+    inspectItems(4, playerId);
+  } else if (item.type === 5) {
+    revealRow(playerId);
+  } else if (item.type === 6) {
+    revealLucky(3, playerId);
   }
   renderPlayerItems(playerId);
 }
@@ -64,7 +70,8 @@ function revealCellsRarity(count, playerId) {
     cell.classList.add('scan-reveal-' + gridItem.rarity);
     var label = gridItem.rarity === 'gold' ? '金' : gridItem.rarity === 'red' ? '稀' : '普';
     var color = gridItem.rarity === 'gold' ? '#ffd700' : gridItem.rarity === 'red' ? '#ff3333' : '#555';
-    cell.innerHTML = '<div style="font-size:9px;color:' + color + ';text-align:center;font-weight:700;">' + label + '</div>';
+    var gs = gridItem.gridSize || 1;
+    cell.innerHTML = '<div style="font-size:9px;color:' + color + ';text-align:center;font-weight:700;">' + label + '<br><span style="font-size:7px;color:#aaa;">×' + gs + '</span><br><span style="font-size:7px;color:#88ff88;">¥' + gridItem.value.toLocaleString() + '</span></div>';
   });
   var name = getPlayerName(playerId);
   addSkillLog(name, '品质扫描', '揭示了 ' + count + ' 个格子的品质');
@@ -76,10 +83,61 @@ function inspectItems(count, playerId) {
   if (playerId === 'me') {
     var names = items.map(function(item) {
       var rn = item.rarity === 'gold' ? '🟡金色' : item.rarity === 'red' ? '🔴稀有' : '⚪普通';
-      return rn + ' ¥' + item.value.toLocaleString();
+      return rn + ' ¥' + item.value.toLocaleString() + ' (×' + (item.gridSize || 1) + ')';
     });
     addSkillLog(getPlayerName(playerId), '透视抽检', '发现 ' + count + ' 件：' + names.join('、'));
   }
+}
+
+function revealRow(playerId) {
+  var cells = document.querySelectorAll('#previewGrid .wh-cell');
+  var row = Math.floor(Math.random() * 10);
+  var startIdx = row * 6;
+  var indices = [];
+  for (var i = 0; i < 6; i++) indices.push(startIdx + i);
+  indices.forEach(function(idx) {
+    var gridItem = gameState.gridItems[idx];
+    var cell = cells[idx];
+    if (!cell || !gridItem) return;
+    cell.classList.add('scan-reveal-' + gridItem.rarity);
+    var label = gridItem.rarity === 'gold' ? '金' : gridItem.rarity === 'red' ? '稀' : '普';
+    var color = gridItem.rarity === 'gold' ? '#ffd700' : gridItem.rarity === 'red' ? '#ff3333' : '#555';
+    var gs = gridItem.gridSize || 1;
+    cell.innerHTML = '<div style="font-size:9px;color:' + color + ';text-align:center;font-weight:700;">' + label + '<br><span style="font-size:7px;color:#aaa;">×' + gs + '</span><br><span style="font-size:7px;color:#88ff88;">¥' + gridItem.value.toLocaleString() + '</span></div>';
+  });
+  var name = getPlayerName(playerId);
+  addSkillLog(name, '大师鉴定', '揭示了第 ' + (row + 1) + ' 行全部 6 格品质');
+}
+
+function revealLucky(count, playerId) {
+  var cells = document.querySelectorAll('#previewGrid .wh-cell');
+  var indices = [];
+  var highIndices = [];
+  for (var i = 0; i < gameState.gridItems.length; i++) {
+    if (gameState.gridItems[i] && (gameState.gridItems[i].rarity === 'gold' || gameState.gridItems[i].rarity === 'red')) {
+      highIndices.push(i);
+    }
+  }
+  if (highIndices.length > 0) {
+    var forcedIdx = highIndices[Math.floor(Math.random() * highIndices.length)];
+    indices.push(forcedIdx);
+  }
+  while (indices.length < count) {
+    var idx = Math.floor(Math.random() * 60);
+    if (indices.indexOf(idx) === -1) indices.push(idx);
+  }
+  indices.forEach(function(idx) {
+    var gridItem = gameState.gridItems[idx];
+    var cell = cells[idx];
+    if (!cell || !gridItem) return;
+    cell.classList.add('scan-reveal-' + gridItem.rarity);
+    var label = gridItem.rarity === 'gold' ? '金' : gridItem.rarity === 'red' ? '稀' : '普';
+    var color = gridItem.rarity === 'gold' ? '#ffd700' : gridItem.rarity === 'red' ? '#ff3333' : '#555';
+    var gs = gridItem.gridSize || 1;
+    cell.innerHTML = '<div style="font-size:9px;color:' + color + ';text-align:center;font-weight:700;">' + label + '<br><span style="font-size:7px;color:#aaa;">×' + gs + '</span><br><span style="font-size:7px;color:#88ff88;">¥' + gridItem.value.toLocaleString() + '</span></div>';
+  });
+  var name = getPlayerName(playerId);
+  addSkillLog(name, '幸运骰子', '投出了命运骰子，揭示了 ' + count + ' 格（保底高品质）');
 }
 
 function aiUseItem(playerId) {

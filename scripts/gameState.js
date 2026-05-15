@@ -1,8 +1,12 @@
+var INITIAL_MONEY = 3000000;
+var INITIAL_AI_MONEY = [2500000, 1800000, 3200000];
+
 var gameState = {
   currentRound: 1,
   maxRounds: 5,
-  money: 3000000,
-  aiMoney: [2500000, 1800000, 3200000],
+  gameNumber: 1,
+  money: INITIAL_MONEY,
+  aiMoney: INITIAL_AI_MONEY.slice(),
   hafCoins: 0,
   collectedItems: [],
   collectedValues: [],
@@ -11,7 +15,10 @@ var gameState = {
   bidAmount: 0,
   bidMultiplier: 1.0,
   roundHistory: [],
-  playerCharId: 'ethan'
+  playerCharId: 'ethan',
+  countdownTime: 30,
+  countdownTimer: null,
+  isCountdownActive: false
 };
 
 var ROUND_RULES = [
@@ -27,27 +34,67 @@ var AI_NAMES = ['落日余晖', '甜心炸弹', '深海猎手'];
 var ITEM_TYPES = [
   { id: 1, name: '扫描器', icon: '🔍', desc: '显示随机3格品质', revealCount: 3 },
   { id: 2, name: '透视镜', icon: '👁', desc: '抽检2个物品(仅自己可见)', inspectCount: 2 },
-  { id: 3, name: '鉴定眼', icon: '🔎', desc: '显示随机5格品质', revealCount: 5 }
+  { id: 3, name: '鉴定眼', icon: '🔎', desc: '显示随机5格品质', revealCount: 5 },
+  { id: 4, name: '透视卷轴', icon: '📜', desc: '深度抽检4个物品(仅自己可见)', inspectCount: 4 },
+  { id: 5, name: '鉴定大师', icon: '🏛', desc: '揭示一整行6格品质', revealCount: 6 },
+  { id: 6, name: '幸运骰子', icon: '🎲', desc: '揭示3格,保底1个高品质', revealCount: 3, lucky: true }
 ];
 
 var playerItems = {};
 var roundItemUsed = {};
 
+var SHOP_CATEGORIES = [
+  { id: 'all', name: '全部', icon: '🏪' },
+  { id: 'reveal', name: '揭示类', icon: '🔍' },
+  { id: 'inspect', name: '透视类', icon: '👁' },
+  { id: 'special', name: '特殊类', icon: '✨' }
+];
+
 var SHOP_ITEMS = [
-  { type: 1, name: '扫描器', icon: '🔍', desc: '揭示3格品质', price: 50 },
-  { type: 2, name: '透视镜', icon: '👁', desc: '抽检2个物品', price: 80 },
-  { type: 3, name: '鉴定眼', icon: '🔎', desc: '揭示5格品质', price: 120 }
+  { type: 1, name: '扫描器', icon: '🔍', desc: '揭示3格品质，基础侦察工具', price: 50, cat: 'reveal', tag: '', hot: false },
+  { type: 3, name: '鉴定眼', icon: '🔎', desc: '揭示5格品质，专业鉴定装备', price: 120, cat: 'reveal', tag: '推荐', hot: true },
+  { type: 5, name: '鉴定大师', icon: '🏛', desc: '揭示一整行6格品质，终极揭示', price: 200, cat: 'reveal', tag: '强力', hot: false },
+  { type: 2, name: '透视镜', icon: '👁', desc: '抽检2个物品，窥探对手底牌', price: 80, cat: 'inspect', tag: '', hot: false },
+  { type: 4, name: '透视卷轴', icon: '📜', desc: '深度抽检4个物品，洞察力翻倍', price: 150, cat: 'inspect', tag: '进阶', hot: false },
+  { type: 6, name: '幸运骰子', icon: '🎲', desc: '揭示3格并保底1个高品质', price: 180, cat: 'special', tag: '稀有', hot: true }
 ];
 
 var collectionItems = [
-  { src: './image/藏品/1.png' },
-  { src: './image/藏品/2.png' },
-  { src: './image/藏品/3.png' },
-  { src: './image/藏品/4.png' },
-  { src: './image/藏品/5.png' },
-  { src: './image/藏品/6.png' },
-  { src: './image/藏品/7.png' },
-  { src: './image/藏品/8.png' }
+  { src: './image/藏品/1.png', gridSize: 1, price: 30000 },
+  { src: './image/藏品/2.png', gridSize: 2, price: 85000 },
+  { src: './image/藏品/3.png', gridSize: 1, price: 25000 },
+  { src: './image/藏品/4.png', gridSize: 3, price: 150000 },
+  { src: './image/藏品/5.png', gridSize: 2, price: 65000 },
+  { src: './image/藏品/6.png', gridSize: 1, price: 35000 },
+  { src: './image/藏品/7.png', gridSize: 2, price: 120000 },
+  { src: './image/藏品/8.png', gridSize: 3, price: 200000 },
+  { src: './image/古董/五代 耀州窑青釉刻花莲瓣纹碗.jpeg', gridSize: 1, price: 85000 },
+  { src: './image/古董/元 蓝釉描金折枝花纹匜.jpeg', gridSize: 2, price: 320000 },
+  { src: './image/古董/元 青白釉串珠纹玉壶春瓶.jpeg', gridSize: 2, price: 180000 },
+  { src: './image/古董/元 青白釉水月观音坐像.jpeg', gridSize: 3, price: 450000 },
+  { src: './image/古董/元 青白釉观音坐像.jpeg', gridSize: 3, price: 420000 },
+  { src: './image/古董/元 青花云龙纹大罐.jpeg', gridSize: 3, price: 380000 },
+  { src: './image/古董/元 青花凤首扁壶.jpeg', gridSize: 2, price: 260000 },
+  { src: './image/古董/元 青花釉里红雕怪石花卉图盖罐.jpeg', gridSize: 3, price: 350000 },
+  { src: './image/古董/元 青釉印花莲纹碗.jpeg', gridSize: 1, price: 65000 },
+  { src: './image/古董/元 黑釉刻花玉壶春瓶.jpeg', gridSize: 2, price: 170000 },
+  { src: './image/古董/元 龙泉窑青釉缠枝牡丹纹大瓶.jpeg', gridSize: 3, price: 290000 },
+  { src: './image/古董/元-青花缠枝牡丹纹罐.jpeg', gridSize: 2, price: 210000 },
+  { src: './image/古董/北宋 耀州窑青釉刻花人物纹执壶.jpeg', gridSize: 2, price: 195000 },
+  { src: './image/古董/北宋 耀州窑青釉刻花莲瓣纹盖瓶.jpeg', gridSize: 2, price: 175000 },
+  { src: './image/古董/北齐 青釉模印兽面纹四系罐.jpeg', gridSize: 2, price: 160000 },
+  { src: './image/古董/南宋 官窑粉青釉金丝铁线方洗.jpeg', gridSize: 1, price: 250000 },
+  { src: './image/古董/南宋 龙泉窑青釉弦纹盘口瓶.jpeg', gridSize: 2, price: 220000 },
+  { src: './image/古董/唐 越窑秘色瓷八棱净瓶.jpeg', gridSize: 2, price: 310000 },
+  { src: './image/古董/唐 邢窑白釉盈字款罐.jpeg', gridSize: 2, price: 155000 },
+  { src: './image/古董/宋 定窑白釉刻花莲瓣纹芒口碗.jpeg', gridSize: 1, price: 95000 },
+  { src: './image/古董/宋 磁州窑白地黑花缠枝纹玉壶春瓶.jpeg', gridSize: 2, price: 145000 },
+  { src: './image/古董/宋 磁州窑绿釉刻花牡丹纹梅瓶.jpeg', gridSize: 2, price: 185000 },
+  { src: './image/古董/宋 钧窑天蓝釉三足炉.jpeg', gridSize: 2, price: 230000 },
+  { src: './image/古董/宋 钧窑玫瑰紫釉海棠式花盆.jpeg', gridSize: 3, price: 270000 },
+  { src: './image/古董/春秋 越王勾践剑.jpeg', gridSize: 3, price: 500000 },
+  { src: './image/古董/隋 白釉双龙柄联腹传瓶.jpeg', gridSize: 3, price: 240000 },
+  { src: './image/古董/隋 青釉四系盘口瓶.jpeg', gridSize: 2, price: 135000 }
 ];
 
 var rarityTypes = ['normal','normal','normal','normal','gold','red'];
@@ -105,11 +152,7 @@ var treasureMaps = [
 function pickItem() {
   var base = collectionItems[Math.floor(Math.random() * collectionItems.length)];
   var rarity = rarityTypes[Math.floor(Math.random() * rarityTypes.length)];
-  var value = 0;
-  if (rarity === 'gold') value = 150000 + Math.floor(Math.random() * 200000);
-  else if (rarity === 'red') value = 80000 + Math.floor(Math.random() * 100000);
-  else value = 10000 + Math.floor(Math.random() * 40000);
-  return { src: base.src, rarity: rarity, value: value };
+  return { src: base.src, rarity: rarity, value: base.price, gridSize: base.gridSize };
 }
 
 function getPlayerName(playerId) {

@@ -19,6 +19,8 @@ function updateUI() {
   document.getElementById('roundInfo').textContent = '第 ' + round + '/5 轮';
   document.getElementById('roundTag').textContent = '第 ' + round + ' 轮';
   document.getElementById('myMoney').textContent = gameState.money.toLocaleString();
+  var badge = document.getElementById('gameNumberBadge');
+  if (badge) badge.textContent = '第 ' + gameState.gameNumber + ' 局';
 }
 
 function updateHafCoinsUI() {

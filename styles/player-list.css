@@ -1,18 +1,22 @@
-.player-card{padding:12px 14px;border-bottom:1px solid #111;display:flex;align-items:center;gap:10px;transition:0.3s}
-.player-card.active{background:rgba(255,215,0,0.06);border-left:3px solid #ffd700}
-.player-card.winner-card{background:rgba(68,255,68,0.06);border-left:3px solid #44ff44}
-.player-card.loser-card{background:rgba(255,68,68,0.06);border-left:3px solid #ff4444}
-.avatar-frame{width:44px;height:44px;border:2px solid #444;flex-shrink:0;overflow:hidden;background:#111;border-radius:50%}
+.player-card{padding:12px 14px;border-bottom:1px solid rgba(0,255,255,0.06);display:flex;align-items:center;gap:10px;transition:0.3s;position:relative}
+.player-card::after{content:'';position:absolute;bottom:0;left:10%;right:10%;height:1px;background:linear-gradient(90deg,transparent,rgba(0,255,255,0.08),transparent)}
+.player-card.active{background:rgba(0,255,255,0.04);border-left:2px solid var(--cyber-cyan);box-shadow:inset 3px 0 15px rgba(0,255,255,0.05);animation:holoBreath 3s ease-in-out infinite}
+.player-card.winner-card{background:rgba(57,255,20,0.04);border-left:2px solid var(--cyber-neon-green);box-shadow:inset 3px 0 15px rgba(57,255,20,0.05)}
+.player-card.loser-card{background:rgba(255,51,102,0.04);border-left:2px solid var(--cyber-hot);box-shadow:inset 3px 0 15px rgba(255,51,102,0.05)}
+.avatar-frame{width:44px;height:44px;border:2px solid rgba(0,255,255,0.2);flex-shrink:0;overflow:hidden;background:rgba(10,10,20,0.6);border-radius:50%;position:relative;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.avatar-frame::after{content:'';position:absolute;inset:-1px;border-radius:50%;border:1px solid transparent;background:conic-gradient(from 0deg,transparent,rgba(0,255,255,0.3),transparent,rgba(255,0,255,0.3),transparent) border-box;-webkit-mask:linear-gradient(#fff 0 0) padding-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:borderGlow 3s ease-in-out infinite}
 .avatar-frame img{width:100%;height:100%;object-fit:cover;display:block}
-.avatar-frame.active-frame{border-color:#ffd700;box-shadow:0 0 12px rgba(255,215,0,0.25)}
+.avatar-frame.active-frame{border-color:var(--cyber-cyan);box-shadow:0 0 12px rgba(0,255,255,0.3),0 0 24px rgba(0,255,255,0.1)}
+.avatar-frame.active-frame::after{background:conic-gradient(from 0deg,transparent,rgba(0,255,255,0.5),transparent,rgba(255,0,255,0.5),transparent) border-box}
 .player-info{flex:1;min-width:0}
-.player-name{font-size:13px;font-weight:600;letter-spacing:0.5px}
-.p-money{color:#ffd700;font-size:12px;margin-top:2px;font-family:'Tahoma'}
-.p-status{font-size:10px;color:#555;margin-top:2px}
-.p-hafcoins{color:#00ccff;font-size:11px;margin-top:1px;font-family:'Tahoma'}
-.p-hafcoins .haf-icon{display:inline-block;width:10px;height:10px;background:linear-gradient(135deg,#00ccff,#0088cc);border-radius:50%;vertical-align:middle;margin-right:2px;box-shadow:0 0 4px rgba(0,204,255,0.4)}
-.shop-entry{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(0,204,255,0.08);border:1px solid rgba(0,204,255,0.25);border-radius:4px;font-size:11px;color:#00ccff;cursor:pointer;transition:0.2s;white-space:nowrap}
-.shop-entry:hover{background:rgba(0,204,255,0.15);border-color:#00ccff}
-.map-entry{cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(255,215,0,0.08);border:1px solid rgba(255,215,0,0.2);border-radius:4px;font-size:11px;color:#ffd700;transition:0.2s;white-space:nowrap}
-.map-entry:hover,.map-entry:active{background:rgba(255,215,0,0.15);border-color:#ffd700}
+.player-name{font-size:13px;font-weight:600;letter-spacing:0.5px;font-family:var(--cyber-font-mono)}
+.p-money{color:var(--cyber-gold);font-size:12px;margin-top:2px;font-family:var(--cyber-font-mono);text-shadow:0 0 8px rgba(255,215,0,0.2)}
+.p-status{font-size:10px;color:rgba(0,255,255,0.4);margin-top:2px;font-family:var(--cyber-font-mono);letter-spacing:1px;text-transform:uppercase}
+.p-hafcoins{color:var(--cyber-cyan);font-size:11px;margin-top:1px;font-family:var(--cyber-font-mono)}
+.p-hafcoins .haf-icon{display:inline-block;width:10px;height:10px;background:linear-gradient(135deg,var(--cyber-cyan),var(--cyber-magenta));border-radius:50%;vertical-align:middle;margin-right:2px;box-shadow:0 0 6px rgba(0,255,255,0.4)}
+.shop-entry{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(0,255,255,0.05);border:1px solid rgba(0,255,255,0.2);border-radius:2px;font-size:11px;color:var(--cyber-cyan);cursor:pointer;transition:0.2s;white-space:nowrap;font-family:var(--cyber-font-mono);clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,4px 100%,0 calc(100% - 4px))}
+.shop-entry:hover{background:rgba(0,255,255,0.1);border-color:var(--cyber-cyan);box-shadow:0 0 10px rgba(0,255,255,0.15)}
+.map-entry{cursor:pointer;display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(255,0,255,0.05);border:1px solid rgba(255,0,255,0.2);border-radius:2px;font-size:11px;color:var(--cyber-magenta);transition:0.2s;white-space:nowrap;font-family:var(--cyber-font-mono);clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,4px 100%,0 calc(100% - 4px))}
+.map-entry:hover,.map-entry:active{background:rgba(255,0,255,0.1);border-color:var(--cyber-magenta);box-shadow:0 0 10px rgba(255,0,255,0.15)}
 .panel-header-right{display:flex;gap:8px;align-items:center}
+.game-number-badge{display:inline-flex;align-items:center;padding:3px 10px;background:linear-gradient(135deg,rgba(255,0,255,0.1),rgba(0,255,255,0.08));border:1px solid rgba(255,0,255,0.3);border-radius:2px;font-size:11px;font-weight:700;color:var(--cyber-magenta);white-space:nowrap;letter-spacing:0.5px;font-family:var(--cyber-font-mono);clip-path:polygon(0 0,calc(100% - 4px) 0,100% 4px,100% 100%,4px 100%,0 calc(100% - 4px));text-shadow:0 0 8px rgba(255,0,255,0.3)}
