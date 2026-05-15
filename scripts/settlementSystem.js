@@ -155,6 +155,7 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
     cell.className = 'settle-cell';
     var gs = item.gridSize || 1;
     cell.style.gridColumn = 'span ' + gs;
+    cell.style.aspectRatio = gs + ' / 1';
 
     var loader = document.createElement('div');
     loader.className = 'circle-loader';
