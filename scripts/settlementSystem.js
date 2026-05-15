@@ -94,6 +94,7 @@ function resolveAuction(allBids) {
   if (isMeWin) {
     gameState.collectedItems.push.apply(gameState.collectedItems, items);
     gameState.collectedValues.push.apply(gameState.collectedValues, items.map(function(i) { return i.value; }));
+    updateWarehouseEntryBadge();
   }
 
   showSettlement(winner, dealPrice, items, totalVal, isMeWin, round);
@@ -135,6 +136,15 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
 
   var total = gameState.collectedItems.length;
   document.getElementById('scanStatus').textContent = total + ' / 20';
+
+  // 展出收入信息
+  var exhibitionHint = '';
+  if (gameState.exhibitionItems.length > 0) {
+    var ei = calcTotalExhibitionIncome();
+    exhibitionHint = '<div style="margin-top:12px;padding:10px;background:rgba(255,215,0,0.03);border:1px solid rgba(255,215,0,0.1);border-radius:2px;text-align:center"><div style="color:rgba(255,215,0,0.5);font-size:11px;letter-spacing:1px;margin-bottom:4px">🏛️ 藏品展出</div><div style="color:var(--cyber-gold);font-size:14px;font-weight:700">当前展厅每轮收入 +<span style="color:var(--cyber-neon-green)">' + ei.toLocaleString() + '</span> 哈夫币</div><div style="color:rgba(255,255,255,0.2);font-size:10px;margin-top:4px">点击左上角 🏛️ 按钮管理展厅</div></div>';
+  } else if (gameState.collectedItems.length > 0) {
+    exhibitionHint = '<div style="margin-top:12px;padding:10px;background:rgba(255,215,0,0.03);border:1px solid rgba(255,215,0,0.1);border-radius:2px;text-align:center"><div style="color:rgba(255,215,0,0.5);font-size:11px;letter-spacing:1px;margin-bottom:4px">💡 提示</div><div style="color:rgba(255,255,255,0.4);font-size:12px">将藏品放入展厅可以每轮赚取哈夫币！</div><div style="color:rgba(255,255,255,0.2);font-size:10px;margin-top:4px">点击左上角 🏛️ 藏品展出</div></div>';
+  }
 
   var grid = document.getElementById('settleGrid');
   grid.innerHTML = '';
@@ -206,13 +216,31 @@ function showSettlement(winner, dealPrice, items, totalVal, isMeWin, round) {
     remainingEl.className = 'settle-remaining settle-game-over';
     remainingEl.innerHTML = '<span class="remain-label">资金归零</span><div class="settle-remain-amount">💀 游戏结束</div>你在第 ' + gameState.gameNumber + ' 局耗尽了所有资金...';
     btn.textContent = '🔄 重新开始';
-    btn.onclick = restartGame;
+    btn.onclick = function() {
+      document.getElementById('settleModal').classList.remove('show');
+      if (gameState.collectedItems.length > 0) {
+        randomEventSystem.showRandomEvents(function() {
+          restartGame();
+        });
+      } else {
+        restartGame();
+      }
+    };
   } else {
     remainingEl.className = 'settle-remaining';
     remainingEl.innerHTML = '<span class="remain-label">当前剩余资金</span><div class="settle-remain-amount">¥ 0</div>';
     var remainAmountEl = remainingEl.querySelector('.settle-remain-amount');
     rollNumber(remainAmountEl, remainingMoney, '¥ ');
     btn.textContent = '▶ 开始第 ' + (gameState.gameNumber + 1) + ' 局';
-    btn.onclick = nextGame;
+    btn.onclick = function() {
+      document.getElementById('settleModal').classList.remove('show');
+      if (gameState.collectedItems.length > 0) {
+        randomEventSystem.showRandomEvents(function() {
+          nextGame();
+        });
+      } else {
+        nextGame();
+      }
+    };
   }
 }

@@ -21,6 +21,7 @@ function updateUI() {
   document.getElementById('myMoney').textContent = gameState.money.toLocaleString();
   var badge = document.getElementById('gameNumberBadge');
   if (badge) badge.textContent = '第 ' + gameState.gameNumber + ' 局';
+  if (typeof updateExhibitionEntryUI === 'function') updateExhibitionEntryUI();
 }
 
 function updateHafCoinsUI() {

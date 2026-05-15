@@ -1,6 +1,25 @@
 var INITIAL_MONEY = 3000000;
 var INITIAL_AI_MONEY = [2500000, 1800000, 3200000];
 
+var SECURITY_GUARD_COST = 200000;
+var INSURANCE_COST = 300000;
+var BASE_THEFT_CHANCE = 0.20;
+var BASE_FIRE_CHANCE = 0.15;
+var SECURITY_THEFT_REDUCTION = 0.08;
+var SECURITY_FIRE_REDUCTION = 0.06;
+var INSURANCE_THEFT_COMP = 0.6;
+var INSURANCE_FIRE_COMP = 0.8;
+var BLACK_MARKET_SELL_RATE = 0.6;
+
+var BLACK_MARKET_ITEMS = [
+  { id: 'bm_scanner', name: '黑市扫描器', icon: '🔍', desc: '揭示8格品质，黑市特供', price: 200, currency: 'haf', type: 1 },
+  { id: 'bm_inspector', name: '黑市透视镜', icon: '👁', desc: '深度抽检6个物品', price: 300, currency: 'haf', type: 2 },
+  { id: 'bm_inspector4', name: '黑市卷轴', icon: '📜', desc: '深度抽检4个物品', price: 150, currency: 'haf', type: 4 },
+  { id: 'bm_lucky', name: '幸运骰子', icon: '🎲', desc: '揭示3格保底1个高品质', price: 180, currency: 'haf', type: 6 },
+  { id: 'bm_emergency', name: '紧急资金', icon: '💰', desc: '立即获得 ¥500,000', price: 400, currency: 'haf', type: 'emergency' },
+  { id: 'bm_fund', name: '小额资助', icon: '🪙', desc: '立即获得 ¥200,000', price: 150, currency: 'haf', type: 'fund' }
+];
+
 var gameState = {
   currentRound: 1,
   maxRounds: 5,
@@ -18,7 +37,13 @@ var gameState = {
   playerCharId: 'ethan',
   countdownTime: 30,
   countdownTimer: null,
-  isCountdownActive: false
+  isCountdownActive: false,
+  exhibitionSlots: 3,
+  exhibitionItems: [],
+  exhibitionIncome: 0,
+  exhibitionTotalEarned: 0,
+  hasSecurityGuard: false,
+  hasInsurance: false
 };
 
 var ROUND_RULES = [
@@ -161,4 +186,32 @@ function getPlayerName(playerId) {
     return ch.name;
   }
   return AI_NAMES[playerId === 'ai1' ? 0 : playerId === 'ai2' ? 1 : 2];
+}
+
+var EXHIBITION_RARITY_RATE = { normal: 0.01, red: 0.02, gold: 0.03 };
+var EXHIBITION_BONUS_SAME_SRC = 0.5;
+var EXHIBITION_SLOT_COST = 100;
+var EXHIBITION_MAX_SLOTS = 8;
+
+function calcExhibitionIncome(item) {
+  var baseRate = EXHIBITION_RARITY_RATE[item.rarity] || 0.01;
+  return Math.floor(item.value * baseRate);
+}
+
+function calcExhibitionBonus(exhibited) {
+  var srcCount = {};
+  exhibited.forEach(function(it) {
+    srcCount[it.src] = (srcCount[it.src] || 0) + 1;
+  });
+  var bonus = 0;
+  Object.keys(srcCount).forEach(function(src) {
+    if (srcCount[src] >= 2) {
+      bonus += Math.floor(srcCount[src] * EXHIBITION_BONUS_SAME_SRC * 1000);
+    }
+  });
+  return bonus;
+}
+
+function getExhibitionItemById(collectionIdx) {
+  return gameState.collectedItems[collectionIdx];
 }

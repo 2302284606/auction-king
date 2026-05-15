@@ -63,6 +63,43 @@
 @keyframes lobbyFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 .lobby-screen.show .lobby-main-layout{animation:lobbyFadeIn 0.5s ease 0.15s both}
 
+.lobby-services-bar{position:relative;z-index:2;display:flex;gap:8px;padding:0 20px 12px;justify-content:center;flex-wrap:wrap}
+.lobby-service-btn{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:2px;border:1px solid rgba(255,255,255,0.1);background:rgba(10,12,20,0.6);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer;transition:all 0.2s ease;font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);font-family:var(--cyber-font-mono);letter-spacing:0.5px}
+.lobby-service-btn:hover{border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.9);transform:translateY(-1px)}
+.lobby-service-btn.active{border-color:var(--cyber-cyan);background:rgba(0,255,255,0.08);color:var(--cyber-cyan);box-shadow:0 0 12px rgba(0,255,255,0.15)}
+.lobby-service-btn.insurance.active{border-color:#4CAF50;background:rgba(76,175,80,0.08);color:#4CAF50;box-shadow:0 0 12px rgba(76,175,80,0.15)}
+.lobby-service-btn.blackmarket{border-color:rgba(255,215,0,0.2);color:rgba(255,215,0,0.6)}
+.lobby-service-btn.blackmarket:hover{border-color:rgba(255,215,0,0.4);background:rgba(255,215,0,0.06);color:#FFD700;box-shadow:0 0 12px rgba(255,215,0,0.15)}
+.lobby-service-icon{font-size:16px}
+.lobby-service-label{font-size:11px}
+.lobby-service-price{font-size:10px;color:rgba(255,255,255,0.3);font-weight:400}
+.lobby-service-btn.active .lobby-service-price{opacity:0.6}
+.lobby-service-btn .service-check{display:none;font-size:12px}
+.lobby-service-btn.active .service-check{display:inline}
+.lobby-service-btn.active .lobby-service-price{display:none}
+
+.lobby-bottom-row{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;padding:0 20px 12px}
+.lobby-exhibition-panel,.lobby-blackmarket-panel,.lobby-services-panel{background:rgba(10,12,20,0.5);border:1px solid rgba(0,255,255,0.12);border-radius:2px;padding:10px 12px;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.lobby-exhibition-header,.lobby-blackmarket-header,.lobby-services-header{font-size:11px;font-family:var(--cyber-font-mono);color:rgba(0,255,255,0.6);letter-spacing:1px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid rgba(0,255,255,0.06)}
+.lobby-services-list{display:flex;flex-direction:column;gap:6px}
+.lobby-svc-item{display:flex;align-items:center;gap:8px;padding:6px 8px;border:1px solid rgba(255,255,255,0.06);border-radius:2px;cursor:pointer;transition:all 0.2s ease;background:rgba(255,255,255,0.02)}
+.lobby-svc-item:hover{border-color:rgba(255,255,255,0.15);background:rgba(255,255,255,0.04)}
+.lobby-svc-item.owned{border-color:rgba(0,255,255,0.2);background:rgba(0,255,255,0.04)}
+.lobby-svc-item.owned:hover{border-color:rgba(0,255,255,0.3)}
+.lobby-svc-icon{font-size:18px;width:28px;text-align:center}
+.lobby-svc-info{flex:1;min-width:0}
+.lobby-svc-name{font-size:11px;font-weight:600;color:rgba(255,255,255,0.8);margin-bottom:1px}
+.lobby-svc-desc{font-size:9px;color:rgba(255,255,255,0.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lobby-svc-price{font-size:10px;font-weight:600;color:var(--cyber-gold);font-family:var(--cyber-font-mono);white-space:nowrap}
+.lobby-svc-item.owned .lobby-svc-price{color:var(--cyber-cyan)}
+.lobby-svc-status{font-size:10px;color:var(--cyber-cyan);font-weight:600;display:none}
+.lobby-svc-item.owned .lobby-svc-status{display:inline}
+.lobby-svc-item.owned .lobby-svc-price{display:none}
+.lobby-blackmarket-btn{width:100%;padding:8px 0;border:1px solid rgba(255,215,0,0.2);border-radius:2px;background:rgba(255,215,0,0.06);color:rgba(255,215,0,0.7);font-size:12px;font-weight:700;font-family:var(--cyber-font-mono);cursor:pointer;transition:all 0.2s ease;letter-spacing:1px;text-align:center;margin-top:6px}
+.lobby-blackmarket-btn:hover{background:rgba(255,215,0,0.12);border-color:rgba(255,215,0,0.35);color:#FFD700;box-shadow:0 0 12px rgba(255,215,0,0.15)}
+.lobby-collection-btn{width:100%;padding:8px 0;border:1px solid rgba(0,255,255,0.2);border-radius:2px;background:rgba(0,255,255,0.06);color:rgba(0,255,255,0.7);font-size:12px;font-weight:700;font-family:var(--cyber-font-mono);cursor:pointer;transition:all 0.2s ease;letter-spacing:1px;text-align:center;margin-top:6px}
+.lobby-collection-btn:hover{background:rgba(0,255,255,0.12);border-color:rgba(0,255,255,0.35);color:var(--cyber-cyan);box-shadow:0 0 12px rgba(0,255,255,0.15)}
+
 @media(max-width:900px){
 .lobby-main-layout{grid-template-columns:1fr;gap:10px;padding:10px 12px;overflow-y:auto}
 .lobby-left{order:1}
@@ -70,4 +107,6 @@
 .lobby-right{order:3}
 .lobby-char-portrait{width:100px;height:100px}
 .lobby-char-bio{display:none}
+.lobby-bottom-row{grid-template-columns:1fr;gap:8px}
+.lobby-services-bar{padding:0 12px 8px}
 }

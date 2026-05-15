@@ -1,0 +1,291 @@
+.random-event-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.random-event-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.random-event-modal {
+  width: 500px;
+  max-height: 85vh;
+  background: rgba(10, 15, 30, 0.95);
+  border: 1px solid rgba(255,100,50,0.3);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(255,50,0,0.2), inset 0 1px 0 rgba(255,100,50,0.2);
+  display: flex;
+  flex-direction: column;
+  animation: eventModalIn 0.4s ease;
+}
+
+@keyframes eventModalIn {
+  from { transform: scale(0.9) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.random-event-header {
+  padding: 24px 28px 16px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.random-event-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #FF6B4A;
+  text-shadow: 0 0 20px rgba(255,100,50,0.4);
+  margin-bottom: 4px;
+}
+
+.random-event-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+}
+
+.random-event-body {
+  padding: 20px 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.random-event-footer {
+  padding: 16px 28px 24px;
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.event-status-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.event-status-item.security-active {
+  background: rgba(0,200,150,0.08);
+  border: 1px solid rgba(0,200,150,0.2);
+  color: rgba(0,200,150,0.9);
+}
+
+.event-status-item.security-inactive {
+  background: rgba(255,165,0,0.08);
+  border: 1px solid rgba(255,165,0,0.2);
+  color: rgba(255,165,0,0.9);
+}
+
+.event-status-icon {
+  font-size: 18px;
+}
+
+.event-loss-card {
+  padding: 14px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  animation: eventCardIn 0.5s ease;
+}
+
+@keyframes eventCardIn {
+  from { transform: translateX(-10px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.event-loss-card.theft {
+  background: rgba(255,50,50,0.08);
+  border: 1px solid rgba(255,50,50,0.25);
+}
+
+.event-loss-card.fire {
+  background: rgba(255,140,0,0.08);
+  border: 1px solid rgba(255,140,0,0.25);
+}
+
+.event-loss-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.event-loss-icon {
+  font-size: 20px;
+}
+
+.event-loss-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FF6B4A;
+}
+
+.event-loss-card.fire .event-loss-title {
+  color: #FF8C00;
+}
+
+.event-loss-desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
+}
+
+.event-loss-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.event-item-badge {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.event-item-badge.normal {
+  background: rgba(79,195,247,0.15);
+  color: #4FC3F7;
+  border: 1px solid rgba(79,195,247,0.2);
+}
+
+.event-item-badge.gold {
+  background: rgba(255,215,0,0.15);
+  color: #FFD700;
+  border: 1px solid rgba(255,215,0,0.2);
+}
+
+.event-item-badge.red {
+  background: rgba(255,69,0,0.15);
+  color: #FF4500;
+  border: 1px solid rgba(255,69,0,0.2);
+}
+
+.event-loss-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #FF6B6B;
+  text-align: right;
+}
+
+.event-safe-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: rgba(0,200,150,0.06);
+  border: 1px solid rgba(0,200,150,0.15);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: rgba(0,200,150,0.8);
+}
+
+.event-safe-icon {
+  font-size: 18px;
+}
+
+.event-insurance-card {
+  padding: 14px;
+  background: rgba(100,180,255,0.08);
+  border: 1px solid rgba(100,180,255,0.2);
+  border-radius: 12px;
+  margin-bottom: 12px;
+  animation: eventCardIn 0.5s ease 0.2s both;
+}
+
+.event-insurance-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.event-insurance-icon {
+  font-size: 18px;
+}
+
+.event-insurance-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #64B5F6;
+}
+
+.event-insurance-desc {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 6px;
+}
+
+.event-insurance-amount {
+  font-size: 20px;
+  font-weight: 700;
+  color: #4CAF50;
+  text-align: center;
+  text-shadow: 0 0 12px rgba(76,175,80,0.3);
+}
+
+.event-summary {
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 10px;
+  margin-top: 12px;
+}
+
+.event-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+}
+
+.event-summary-row .loss {
+  color: #FF6B6B;
+  font-weight: 600;
+}
+
+.event-summary-row .gain {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.event-summary-row.final {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 6px;
+  padding-top: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+}
+
+.event-all-safe {
+  text-align: center;
+  padding: 24px 0;
+}
+
+.event-all-safe-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.event-all-safe-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #4CAF50;
+  text-shadow: 0 0 12px rgba(76,175,80,0.3);
+}

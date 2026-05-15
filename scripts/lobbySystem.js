@@ -20,6 +20,7 @@ function openLobby() {
   lobbyCharIndex = characterData.findIndex(function(c) { return c.id === gameState.playerCharId; });
   if (lobbyCharIndex < 0) lobbyCharIndex = 0;
   renderLobby();
+  document.querySelector('.game-wrapper').classList.remove('show');
   document.getElementById('lobbyScreen').classList.add('show');
 }
 
@@ -48,6 +49,7 @@ function renderLobby() {
 
   renderLobbyThumbs();
   renderLobbyPocket();
+  renderLobbyServices();
 }
 
 function renderLobbyThumbs() {
@@ -95,6 +97,92 @@ function renderLobbyPocket() {
     container.appendChild(slot);
   }
   document.getElementById('lobbyPocketCount').textContent = filledCount + ' / 5';
+}
+
+function renderLobbyServices() {
+  var svcList = document.getElementById('lobbyServicesList');
+  if (!svcList) return;
+  svcList.innerHTML = '';
+
+  var services = [
+    {
+      key: 'security',
+      icon: '🛡️',
+      name: '保安服务',
+      desc: '失窃概率-8% 失火概率-6%',
+      price: SECURITY_GUARD_COST,
+      owned: gameState.hasSecurityGuard,
+      toggle: function() {
+        if (gameState.hasSecurityGuard) {
+          gameState.hasSecurityGuard = false;
+          gameState.money += SECURITY_GUARD_COST;
+          showFloatingMessage('退订了保安服务', 'info');
+        } else {
+          if (gameState.money < SECURITY_GUARD_COST) {
+            showFloatingMessage('资金不足！需要 ¥' + SECURITY_GUARD_COST.toLocaleString(), 'error');
+            return;
+          }
+          gameState.money -= SECURITY_GUARD_COST;
+          gameState.hasSecurityGuard = true;
+          showFloatingMessage('已购买保安服务！', 'success');
+        }
+        renderLobby();
+        updateLobbyGoldDisplay();
+      }
+    },
+    {
+      key: 'insurance',
+      icon: '📋',
+      name: '保险服务',
+      desc: '失窃赔付60% 失火赔付80%',
+      price: INSURANCE_COST,
+      owned: gameState.hasInsurance,
+      toggle: function() {
+        if (gameState.hasInsurance) {
+          gameState.hasInsurance = false;
+          gameState.money += INSURANCE_COST;
+          showFloatingMessage('退订了保险服务', 'info');
+        } else {
+          if (gameState.money < INSURANCE_COST) {
+            showFloatingMessage('资金不足！需要 ¥' + INSURANCE_COST.toLocaleString(), 'error');
+            return;
+          }
+          gameState.money -= INSURANCE_COST;
+          gameState.hasInsurance = true;
+          showFloatingMessage('已购买保险服务！', 'success');
+        }
+        renderLobby();
+        updateLobbyGoldDisplay();
+      }
+    }
+  ];
+
+  services.forEach(function(svc) {
+    var item = document.createElement('div');
+    item.className = 'lobby-svc-item' + (svc.owned ? ' owned' : '');
+    item.innerHTML =
+      '<div class="lobby-svc-icon">' + svc.icon + '</div>' +
+      '<div class="lobby-svc-info">' +
+        '<div class="lobby-svc-name">' + svc.name + '</div>' +
+        '<div class="lobby-svc-desc">' + svc.desc + '</div>' +
+      '</div>' +
+      '<div class="lobby-svc-price">¥' + svc.price.toLocaleString() + '</div>' +
+      '<div class="lobby-svc-status">✓ 已购</div>';
+    item.onclick = svc.toggle;
+    svcList.appendChild(item);
+  });
+
+  var bmBtn = document.getElementById('lobbyBlackMarketBtn');
+  if (bmBtn) {
+    bmBtn.onclick = function() {
+      blackMarketSystem.open();
+    };
+  }
+}
+
+function updateLobbyGoldDisplay() {
+  var goldEl = document.getElementById('lobbyGold');
+  if (goldEl) goldEl.textContent = gameState.money.toLocaleString();
 }
 
 function lobbyStartGame() {

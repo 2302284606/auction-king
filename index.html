@@ -17,6 +17,10 @@
 <link rel="stylesheet" href="styles/confirm-dialog.css">
 <link rel="stylesheet" href="styles/start-screen.css">
 <link rel="stylesheet" href="styles/lobby.css">
+<link rel="stylesheet" href="styles/exhibition.css">
+<link rel="stylesheet" href="styles/warehouse.css">
+<link rel="stylesheet" href="styles/black-market.css">
+<link rel="stylesheet" href="styles/random-event.css">
 </head>
 <body>
 
@@ -145,6 +149,12 @@
         <div class="lobby-pocket-count" id="lobbyPocketCount">0 / 5</div>
       </div>
 
+      <div class="lobby-services-panel">
+        <div class="lobby-services-header">&#x1F6E1; 安保服务</div>
+        <div class="lobby-services-list" id="lobbyServicesList"></div>
+        <button class="lobby-blackmarket-btn" id="lobbyBlackMarketBtn">&#x1F311; 进入黑市</button>
+      </div>
+
       <button class="lobby-start-btn" onclick="lobbyStartGame()">&#x1F525; 开始竞拍</button>
     </div>
   </div>
@@ -185,6 +195,7 @@
       <span class="panel-header-right">
         <span class="game-number-badge" id="gameNumberBadge">第 1 局</span>
         <span class="shop-entry" id="shopEntryBtn">&#x1F6D2; 商城</span>
+        <span class="exhibition-entry" id="exhibitionEntryBtn">&#x1F3DB;&#xFE0F; 藏品展出</span>
         <span id="roundInfo">第 1/5 轮</span>
       </span>
     </div>
@@ -286,6 +297,7 @@
     <div class="panel-header">
       <span>&#x1F3DB; 藏品矩阵</span>
       <span class="panel-header-right">
+        <span class="warehouse-entry" id="warehouseEntryBtn">&#x1F3DB; 个人仓库 <span class="wh-count" id="warehouseCount" style="display:none">0</span></span>
         <span class="map-entry" id="mapEntryBtn">&#x1F5FA;&#xFE0F; 仓库地图</span>
         <span id="scanStatus">READY</span>
       </span>
@@ -386,6 +398,54 @@
   </div>
 </div>
 
+<div class="warehouse-overlay" id="warehouseOverlay">
+  <div class="warehouse-panel">
+    <div class="warehouse-header">
+      <div class="warehouse-header-glow"></div>
+      <div class="warehouse-title-row">
+        <span class="warehouse-title-icon">&#x1F3DB;</span>
+        <div class="warehouse-title">个人仓库</div>
+      </div>
+      <div class="warehouse-subtitle">你在竞拍中赢得的所有珍贵藏品</div>
+      <div class="warehouse-close" id="warehouseClose">&#x2715;</div>
+    </div>
+    <div class="warehouse-stats">
+      <div class="warehouse-stat">
+        <span class="stat-icon">&#x1F4E6;</span>
+        <div>
+          <div class="stat-label">藏品总数</div>
+          <div class="stat-val"><span id="whStatCount">0</span></div>
+        </div>
+      </div>
+      <div class="warehouse-stat">
+        <span class="stat-icon">&#x1FA99;</span>
+        <div>
+          <div class="stat-label">总估值</div>
+          <div class="stat-val"><span id="whStatValue">0</span></div>
+        </div>
+      </div>
+      <div class="warehouse-stat">
+        <span class="stat-icon">&#x2728;</span>
+        <div>
+          <div class="stat-label">金色传说</div>
+          <div class="stat-val"><span id="whStatGold">0</span></div>
+        </div>
+      </div>
+      <div class="warehouse-stat">
+        <span class="stat-icon">&#x1F48E;</span>
+        <div>
+          <div class="stat-label">稀有珍品</div>
+          <div class="stat-val"><span id="whStatRed">0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="warehouse-tabs" id="warehouseTabs"></div>
+    <div class="warehouse-body">
+      <div class="warehouse-grid" id="warehouseGrid"></div>
+    </div>
+  </div>
+</div>
+
 <div class="shop-overlay" id="shopOverlay">
   <div class="shop-panel">
     <div class="shop-header">
@@ -422,6 +482,54 @@
   </div>
 </div>
 
+<div class="exhibition-overlay" id="exhibitionOverlay">
+  <div class="exhibition-panel">
+    <div class="exhibition-header">
+      <div class="exhibition-header-glow"></div>
+      <div class="exhibition-title-row">
+        <span class="exhibition-title-icon">&#x1F3DB;&#xFE0F;</span>
+        <div class="exhibition-title">藏品展出</div>
+      </div>
+      <div class="exhibition-subtitle">将藏品放入展厅，每轮自动赚取哈夫币</div>
+      <div class="exhibition-close" id="exhibitionClose">&#x2715;</div>
+    </div>
+    <div class="exhibition-stats-row">
+      <div class="exhibition-stat">
+        <span class="stat-icon">&#x1F4B0;</span>
+        <div>
+          <div class="stat-label">每轮收入</div>
+          <div class="stat-val"><span id="exhibitionRoundIncome">0</span></div>
+        </div>
+      </div>
+      <div class="exhibition-stat">
+        <span class="stat-icon">&#x1F48E;</span>
+        <div>
+          <div class="stat-label">累计收入</div>
+          <div class="stat-val"><span id="exhibitionTotalEarned">0</span></div>
+        </div>
+      </div>
+      <div class="exhibition-stat">
+        <span class="stat-icon">&#x1F3DB;&#xFE0F;</span>
+        <div>
+          <div class="stat-label">展位</div>
+          <div class="stat-val"><span id="exhibitionItemCount">0 / 3</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="exhibition-body">
+      <div class="exhibition-section-title">&#x1F3AF; 展厅展位</div>
+      <div class="exhibition-slots" id="exhibitionSlots"></div>
+      <div class="exhibition-section-title">&#x1F4E6; 我的藏品</div>
+      <div class="exhibition-collection" id="exhibitionCollection"></div>
+    </div>
+    <div class="exhibition-footer">
+      <button class="exhibition-collect-btn" id="exhibitionCollectBtn" disabled>&#x1F4B0; 收取收入 (+0)</button>
+      <button class="exhibition-expand-btn" id="exhibitionExpandBtn">&#x1F513; 解锁展位 (100币)</button>
+      <div class="exhibition-footer-info" id="exhibitionRemainInfo"></div>
+    </div>
+  </div>
+</div>
+
 <div class="confirm-overlay" id="confirmOverlay">
   <div class="confirm-box">
     <div class="confirm-icon" id="confirmIcon">&#x1F50D;</div>
@@ -432,6 +540,15 @@
       <button class="confirm-no" id="confirmNo">取消</button>
     </div>
   </div>
+</div>
+
+<div class="bm-overlay" id="blackMarketOverlay"></div>
+
+<div class="random-event-overlay" id="randomEventOverlay"></div>
+
+<div class="preview-popup" id="previewPopup">
+  <div class="preview-popup-img"></div>
+  <div class="preview-popup-info"></div>
 </div>
 
 <script src="scripts/gameState.js"></script>
@@ -448,6 +565,10 @@
 <script src="scripts/characterSystem.js"></script>
 <script src="scripts/startScreen.js"></script>
 <script src="scripts/lobbySystem.js"></script>
+<script src="scripts/randomEventSystem.js"></script>
+<script src="scripts/blackMarketSystem.js"></script>
+<script src="scripts/warehouseSystem.js"></script>
+<script src="scripts/exhibitionSystem.js"></script>
 <script src="scripts/gameInit.js"></script>
 </body>
 </html>

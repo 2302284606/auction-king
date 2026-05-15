@@ -96,6 +96,6 @@ function enterGame() {
 
   setTimeout(function() {
     screen.style.display = 'none';
-    openLobby();
+    openMapSelection();
   }, 800);
 }

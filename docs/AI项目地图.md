@@ -26,7 +26,11 @@
 | [characterSystem.js](file:///e:/竞拍之王/auction-king-main/auction-king-main/scripts/characterSystem.js) | 149 | 角色选择/轮盘/拖拽 | `selectedCharIndex`, `charDragging`, `charStartX`, `charScrollLeft`, `charTrackOffset`, `charAnimating`, `buildCharTrack()`, `selectCharCard()`, `initCharDrag()`, `openCharSelection()`, `closeCharSelection()`, `confirmCharSelection()`, `initCharacterListeners()` |
 | [startScreen.js](file:///e:/竞拍之王/auction-king-main/auction-king-main/scripts/startScreen.js) | 101 | 开始界面/角色预览 | `startCharIndex`, `initStartScreen()`, `createStartParticles()`, `updateStartCharacter()`, `renderStartCharGrid()`, `openStartCharSelect()`, `closeStartCharSelect()`, `enterGame()` |
 | [lobbySystem.js](file:///e:/竞拍之王/auction-king-main/auction-king-main/scripts/lobbySystem.js) | 102 | 大厅界面/角色展示 | `LOBBY_SKILLS`, `LOBBY_TITLES`, `lobbyCharIndex`, `openLobby()`, `closeLobby()`, `renderLobby()`, `renderLobbyThumbs()`, `renderLobbyPocket()`, `lobbyStartGame()` |
-| [gameInit.js](file:///e:/竞拍之王/auction-king-main/auction-king-main/scripts/gameInit.js) | 133 | 初始化/重启/键盘监听/入口 | `init()`, `initRound()`, `restartGame()`, `initKeyboardListeners()`, `window.onload` |
+| [warehouseSystem.js](file:///e:/竞拍之王/auction-king/scripts/warehouseSystem.js) | ~130 | 个人仓库/藏品展示 | `warehouseActiveCat`, `warehouseTooltip`, `WAREHOUSE_CATEGORIES`, `RARITY_NAMES`, `openWarehouse()`, `closeWarehouse()`, `renderWarehouseTabs()`, `renderWarehouseStats()`, `renderWarehouseItems()`, `updateWarehouseEntryBadge()`, `initWarehouseListeners()` |
+| [exhibitionSystem.js](file:///e:/竞拍之王/auction-king/scripts/exhibitionSystem.js) | ~80 | 藏品展出管理 | `exhibitionSlots`, `exhibitionItems`, `openExhibition()`, `closeExhibition()`, `renderExhibition()`, `assignExhibitionSlots()`, `calculateExhibitionIncome()`, `initExhibitionListeners()` |
+| [gameInit.js](file:///e:/竞拍之王/auction-king-main/auction-king-main/scripts/gameInit.js) | 133 | 初始化/重启/键盘监听/入口 | `init()`, `initRound()`, `restartGame()`, `initKeyboardListeners()`, `window.onload` | (依赖 `exhibitionSystem.js`)
+| [blackMarketSystem.js](file:///e:/竞拍之王/auction-king/scripts/blackMarketSystem.js) | ~180 | 黑市交易系统 | `open()`, `close()`, `render()`, `buyItem()`, `sellItem()` | 依赖 `gameState.js`, `randomEventSystem.js` |
+| [randomEventSystem.js](file:///e:/竞拍之王/auction-king/scripts/randomEventSystem.js) | ~220 | 随机事件（失窃/失火） | `rollEvents()`, `calcEventLosses()`, `applyLosses()`, `showRandomEvents()` | 依赖 `gameState.js` |
 
 ### 1.2 CSS 文件（按加载顺序）
 
@@ -42,9 +46,12 @@
 | [map-overlay.css](file:///e:/竞拍之王/auction-king-main/auction-king-main/styles/map-overlay.css) | 55 | 仓库地图抽取、轮盘、卡片 | `.map-overlay`, `.map-track`, `.map-card`, `.map-shipwreck`, `.map-villa`, `.map-desert`, `.map-tomb` |
 | [character-select.css](file:///e:/竞拍之王/auction-king-main/auction-king-main/styles/character-select.css) | 63 | 角色选择卡片、轮盘、拖拽 | `.char-overlay`, `.char-track`, `.char-card`, `.char-shipwreck`, `.char-villa`, `.char-desert`, `.char-tomb`, `.char-auction` |
 | [shop.css](file:///e:/竞拍之王/auction-king-main/auction-king-main/styles/shop.css) | 29 | 商城面板、商品列表、背包 | `.shop-overlay`, `.shop-panel`, `.shop-item`, `.shop-buy-btn`, `.shop-inv-slot` |
+| [black-market.css](file:///e:/竞拍之王/auction-king/styles/black-market.css) | ~200 | 黑市弹窗、商品列表、卖出网格 | `.bm-overlay`, `.bm-modal`, `.bm-item`, `.bm-sell-item` |
+| [random-event.css](file:///e:/竞拍之王/auction-king/styles/random-event.css) | ~200 | 随机事件弹窗、损失卡片 | `.random-event-overlay`, `.event-loss-card`, `.event-insurance-card` |
 | [confirm-dialog.css](file:///e:/竞拍之王/auction-king-main/auction-king-main/styles/confirm-dialog.css) | 11 | 确认弹窗 | `.confirm-overlay`, `.confirm-box`, `.confirm-yes`, `.confirm-no` |
 | [start-screen.css](file:///e:/竞拍之王/auction-king-main/auction-king-main/styles/start-screen.css) | 57 | 开始界面、粒子、角色预览 | `.start-screen`, `.start-particle`, `.start-char-option`, `.char-select-overlay` |
 | [lobby.css](file:///e:/竞拍之王/auction-king-main/auction-king-main/styles/lobby.css) | 50 | 大厅界面、角色展示、技能面板 | `.lobby-screen`, `.lobby-char-showcase`, `.lobby-thumb`, `.lobby-pocket-slot` |
+| [warehouse.css](file:///e:/竞拍之王/auction-king/styles/warehouse.css) | ~90 | 个人仓库弹窗、藏品网格、统计 | `.warehouse-overlay`, `.warehouse-panel`, `.warehouse-grid`, `.warehouse-item`, `.warehouse-entry`, `.warehouse-tooltip` |
 
 ### 1.3 HTML 文件
 
@@ -65,6 +72,9 @@
 | **修改角色选择界面** | `characterSystem.js`, `character-select.css` | — | 竞拍、结算等 |
 | **修改开始界面** | `startScreen.js`, `start-screen.css` | `gameState.js` (角色数据) | 竞拍、结算等 |
 | **修改大厅界面** | `lobbySystem.js`, `lobby.css` | `gameState.js` (角色/资金) | 竞拍、结算等 |
+| **修改安保服务（保安/保险）** | `gameState.js` (配置参数), `lobbySystem.js`, `lobby.css` | `randomEventSystem.js` | 商城、竞拍等 |
+| **修改黑市系统** | `blackMarketSystem.js`, `black-market.css`, `gameState.js` (`BLACK_MARKET_ITEMS`) | `lobbySystem.js` | 竞拍、结算等 |
+| **修改随机事件（失窃/失火）** | `randomEventSystem.js`, `random-event.css`, `gameState.js` (概率参数) | `settlementSystem.js` | 商城、竞拍等 |
 | **修改竞拍规则** | `gameState.js` (L17-23 `ROUND_RULES`), `bidSystem.js`, `settlementSystem.js` | `auction-area.css` | 商城、地图、角色等 |
 | **修改 AI 出价策略** | `bidSystem.js` (L1-26 `generateAIBids`) | — | 其他全部 |
 | **修改出价 UI/倍数** | `bidSystem.js` (L28-231), `auction-area.css` | `numpad.js` | 结算、商城等 |
@@ -77,6 +87,8 @@
 | **修改地图抽取** | `gameState.js` (L98-103 `treasureMaps`), `mapSystem.js`, `map-overlay.css` | — | 竞拍、结算、商城等 |
 | **修改音效** | `audioSystem.js` | — | 其他全部 |
 | **修改 UI/日志** | `uiHelpers.js`, `auction-area.css` (日志样式) | — | 其他全部 |
+| **查看/修改个人仓库** | `warehouseSystem.js`, `warehouse.css` | `gameState.js` (`collectedItems`) | `settlementSystem.js` (添加藏品) | 其他全部 |
+| **藏品展出/赚钱** | `exhibitionSystem.js`, `exhibition.css` | `gameState.js` (`exhibition*`) | `gameInit.js` (每轮结算) | 竞拍、商城等 |
 | **修改初始化/重启** | `gameInit.js`, `gameState.js` | `warehouse-grid.css` | — |
 | **修改全局样式** | `global.css` | — | — |
 | **修改响应式布局** | `global.css` (L8-11), 各组件 CSS 的 `@media` | — | — |
@@ -99,7 +111,8 @@
 | `characterSystem.js` | 角色选择 | `gameInit.js` |
 | `startScreen.js` | 开始界面 | `gameInit.js` |
 | `lobbySystem.js` | 大厅 | `gameInit.js`, `mapSystem.js` |
-| `gameInit.js` | 入口/初始化 | 所有模块 |
+| `warehouseSystem.js` | 个人仓库 | `settlementSystem.js` (调用 `updateWarehouseEntryBadge`), `gameInit.js` |
+| `gameInit.js` | 入口/初始化 | 所有模块，`exhibitionSystem.js` |
 
 ---
 
@@ -149,6 +162,14 @@ gameInit.js           ← 所有模块
 | `charAnimating` | characterSystem.js | characterSystem.js | characterSystem.js |
 | `startCharIndex` | startScreen.js | startScreen.js | startScreen.js |
 | `lobbyCharIndex` | lobbySystem.js | lobbySystem.js | lobbySystem.js |
+| `warehouseActiveCat` | warehouseSystem.js | warehouseSystem.js | warehouseSystem.js |
+| `warehouseTooltip` | warehouseSystem.js | warehouseSystem.js | warehouseSystem.js |
+| `WAREHOUSE_CATEGORIES` | warehouseSystem.js | warehouseSystem.js | — |
+| `RARITY_NAMES` | warehouseSystem.js | warehouseSystem.js | — |
+| `exhibitionSlots` | gameState.js | exhibitionSystem.js | — |
+| `exhibitionItems` | gameState.js | exhibitionSystem.js, settlementSystem.js | exhibitionSystem.js, gameInit.js |
+| `exhibitionIncome` | gameState.js | exhibitionSystem.js, settlementSystem.js | settlementSystem.js |
+| `exhibitionTotalEarned` | gameState.js | exhibitionSystem.js | exhibitionSystem.js, gameInit.js |
 | `LOBBY_SKILLS` | lobbySystem.js | lobbySystem.js | — |
 | `LOBBY_TITLES` | lobbySystem.js | lobbySystem.js | — |
 
@@ -236,6 +257,16 @@ gameInit.js           ← 所有模块
 | `confirmDesc` | index.html L395 | confirmDialog.js | — |
 | `confirmYes` | index.html L397 | confirmDialog.js | — |
 | `confirmNo` | index.html L398 | confirmDialog.js | — |
+| `warehouseOverlay` | index.html | warehouseSystem.js, gameInit.js | warehouse.css |
+| `warehouseClose` | index.html | warehouseSystem.js | — |
+| `warehouseEntryBtn` | index.html | warehouseSystem.js | — |
+| `warehouseCount` | index.html | warehouseSystem.js | — |
+| `warehouseTabs` | index.html | warehouseSystem.js | — |
+| `warehouseGrid` | index.html | warehouseSystem.js | — |
+| `whStatCount` | index.html | warehouseSystem.js | — |
+| `whStatValue` | index.html | warehouseSystem.js | — |
+| `whStatGold` | index.html | warehouseSystem.js | — |
+| `whStatRed` | index.html | warehouseSystem.js | — |
 
 ---
 
@@ -316,6 +347,7 @@ characterData = [
 | 确认弹窗 | `confirm-dialog.css` | `.confirm-overlay`, `.confirm-box`, `.confirm-yes`, `.confirm-no` |
 | 开始界面 | `start-screen.css` | `.start-screen`, `.start-particle`, `.start-char-option`, `.active`, `.char-select-overlay` |
 | 大厅 | `lobby.css` | `.lobby-screen`, `.lobby-thumb`, `.active`, `.lobby-pocket-slot`, `.filled`, `.empty` |
+| 个人仓库 | `warehouse.css` | `.warehouse-overlay`, `.warehouse-panel`, `.warehouse-grid`, `.warehouse-item`, `.warehouse-entry`, `.warehouse-tab`, `.wh-rarity-gold`, `.wh-rarity-red`, `.warehouse-tooltip` |
 
 ---
 

@@ -13,9 +13,16 @@ function init() {
 }
 
 function initRound(round) {
+  document.querySelector('.game-wrapper').classList.add('show');
   updateUI();
   document.getElementById('btnConfirm').disabled = false;
   addLog('system', '🎯 第 ' + round + ' 轮开始');
+
+  var exhibitionIncome = collectExhibitionIncomeSilent();
+  if (exhibitionIncome > 0) {
+    addLog('system', '🏛️ 展厅收入 +' + exhibitionIncome.toLocaleString() + ' 哈夫币');
+  }
+  updateExhibitionEntryUI();
 
   generateAIBids(true);
 
@@ -28,6 +35,10 @@ function initRound(round) {
   aiUseItem('ai3');
 
   activateShadowScan();
+  if (gameState.playerCharId === 'sunset') {
+    var ch = characterData.find(function(c) { return c.id === gameState.playerCharId; }) || characterData[0];
+    activateActuary(ch.name);
+  }
   startCountdown();
 }
 
@@ -56,7 +67,13 @@ function nextGame() {
     playerCharId: savedCharId,
     countdownTime: 30,
     countdownTimer: null,
-    isCountdownActive: false
+    isCountdownActive: false,
+    exhibitionSlots: 3,
+    exhibitionItems: [],
+    exhibitionIncome: 0,
+    exhibitionTotalEarned: 0,
+    hasSecurityGuard: false,
+    hasInsurance: false
   };
 
   applyCharacterUI(savedCharId);
@@ -88,7 +105,13 @@ function restartGame() {
     playerCharId: savedCharId,
     countdownTime: 30,
     countdownTimer: null,
-    isCountdownActive: false
+    isCountdownActive: false,
+    exhibitionSlots: 3,
+    exhibitionItems: [],
+    exhibitionIncome: 0,
+    exhibitionTotalEarned: 0,
+    hasSecurityGuard: false,
+    hasInsurance: false
   };
 
   applyCharacterUI(savedCharId);
@@ -151,11 +174,15 @@ function initKeyboardListeners() {
     if (startScreen && startScreen.style.display !== 'none' && !startScreen.classList.contains('exit')) return;
     if (document.getElementById('startCharOverlay').classList.contains('show')) return;
     if (document.getElementById('shopOverlay').classList.contains('show')) return;
+    if (document.getElementById('warehouseOverlay').classList.contains('show')) return;
     if (document.getElementById('confirmOverlay').classList.contains('show')) return;
     if (document.getElementById('charOverlay').classList.contains('show')) return;
     if (document.getElementById('mapOverlay').classList.contains('show')) return;
+    if (document.getElementById('exhibitionOverlay').classList.contains('show')) return;
     if (document.getElementById('settleModal').classList.contains('show')) return;
     if (document.getElementById('numpadOverlay').classList.contains('show')) return;
+    if (document.getElementById('blackMarketOverlay').classList.contains('show')) return;
+    if (document.getElementById('randomEventOverlay').classList.contains('show')) return;
     var key = parseInt(e.key);
     if (key >= 1 && key <= 5) {
       var slotIdx = key - 1;
@@ -173,7 +200,9 @@ window.onload = function() {
   initBidListeners();
   initMapListeners();
   initCharacterListeners();
+  initExhibitionListeners();
   initKeyboardListeners();
+  initWarehouseListeners();
 
   init();
   initStartScreen();
